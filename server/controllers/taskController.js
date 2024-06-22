@@ -1,0 +1,284 @@
+import Task from '../models/task.js';
+import User from '../models/User.js';
+import Family from "../models/family.js";
+import Notification from '../models/notification.js';
+
+export const createTask = async (req, res) => {
+    try{
+        const { title, datelines, priority, description} = req.body;
+        const { userId } = req.user;
+
+        // Retrieve the current user's family members
+        const currentUser = await User.findById(userId);
+        if (!currentUser) {
+            return res.status(404).json({ status: false, message: "User not found" });
+        }
+
+        // Retrieve the family document using the familyId
+        const family = await Family.findOne({familyId: currentUser.familyId} );
+        //console.log(family)
+        if (!family) {
+            return res.status(404).json({ status: false, message: "Family not found" });
+        }
+
+        // Collect IDs of all family members    
+        const familyMemberIds = family.familyMembers.map(member => member.toString());
+
+        const familyMembers = await User.find({ familyId: currentUser.familyId });
+        const familyMemberEmails = familyMembers.map(member => member.email);
+
+        // Create a single task for all family members
+        const task = await Task.create({
+            title,
+            datelines: new Date(datelines).toDateString(),
+            priority,
+            description,
+            status: "Incomplete",
+            familyId: family._id, // Assign the task to all family members including the current user
+            created_by: userId, // Assign the task to the current user
+        });
+
+        // Update all family members to include the created task
+        await User.updateMany(
+            { _id: { $in: familyMemberIds } },
+            { $push: { tasks: task._id } }
+        );
+
+         // Create a notification for all family members if the task is high priority and incomplete
+         if (task !== null && task.priority === "High" && task.status === "Incomplete"){
+
+            const NotiTask = await Notification.create({
+                type: "Task",
+                typeId: task._id,
+                typeTitle: title,
+                typeDatelines: new Date(datelines).toDateString(),
+                FamilyId: family._id,
+                FamilyMembers: familyMemberIds,
+                FamilyEmails: familyMemberEmails,
+                status: "Waiting",
+                sentAt: '',
+                successfulAt: '',
+            })
+        }
+
+        res.status(200).json({status:true, message: "Task created successfully", task})
+    }
+    catch (error){
+        console.log(error)
+        return res.status(400).json({status:false, message: error.message})
+    }
+
+}
+
+export const getTask = async (req, res) => {
+    try{
+        const {userId} = req.user; // get user id from request
+        
+        // find user by id and their family members
+        const currentUser = await User.findById(userId);
+
+        // Ensure the user belongs to a family
+        if (!currentUser.familyId) {
+            return res.status(400).json({ status: false, message: "User does not belong to a family" });
+        }
+
+        // Retrieve the family document to get the family ID
+        const family = await Family.findOne({familyId: currentUser.familyId});
+
+        // Check if the family document exists
+        if (!family) {
+            return res.status(400).json({ status: false, message: "Family not found" });
+        }
+
+        //retrieve all tasks assigned to the user and their family members
+        const tasks = await Task.find({
+            familyId: family._id
+        })
+        .select("title datelines priority status description created_by")
+        .populate({
+            path: "created_by",
+            select: "username",
+            model: User
+        })
+        .sort({
+            status: -1,
+            datelines: 1,
+            priority: 1,
+        });
+
+        //check if there are no tasks
+        if (!tasks || tasks.length === 0){
+            return res.status(404).json({status:false, message: "No task found"});
+        }
+
+        res.status(200).json({status:true, tasks})
+
+    }
+    catch (error){
+        console.log(error)
+        return res.status(400).json({status:false, message: error.message})
+    }
+
+}
+
+export const deleteTask = async (req, res) => {
+    try{
+        const {id} = req.params;
+        const {userId} = req.user;
+
+        // find the task by id
+        const task = await Task.findById(id).populate('created_by');
+
+        //console.log(task)
+
+        // check if the task exist
+        if (!task){
+            return res.status(404).json({status:false, message: "Task not found"})
+        }
+
+        const currentUser = await User.findById(userId);
+        //console.log(currentUser)
+
+        // Check if the current user is either a parent (father or mother) or the creator of the task
+        const isParentOrCreator = (['father', 'mother'].includes(currentUser.role)) || (task.created_by._id.toString() === userId);
+
+        // check if the task was created by the current user
+        if (!isParentOrCreator){
+            return res.status(401).json({status:false, message: "Parent or creator only can delete task"})
+        }
+
+
+        // delete the task
+        await Task.findByIdAndDelete(id);
+
+        // Update related documents (users and family) to remove the task ID from their arrays
+        // Remove task ID from users
+        await User.updateMany(
+            { tasks: id },
+            { $pull: { tasks: id } }
+        );
+
+        // Remove task ID from family documents
+        await Family.updateMany(
+            { tasks: id },
+            { $pull: { tasks: id } }
+        );
+
+        res.status(200).json({status:true, message: "Task deleted successfully"})
+    }
+    catch (error){
+        console.log(error)
+        return res.status(400).json({status:false, message: error.message})
+    }
+
+}
+
+export const updateTask = async (req, res) => {
+    try{
+        const {id} = req.params;
+        const {userId} = req.user;
+        const { title, datelines, priority, description} = req.body;
+
+        // find the task by id
+        const task = await Task.findById(id);
+        //console.log(task)
+
+        // check if the task exist
+        if (!task){
+            return res.status(404).json({status:false, message: "Task not found"})
+        }
+
+        // check if the task was created by the current user
+        if (task.created_by.toString() !== userId){
+            return res.status(401).json({status:false, message: "You are not authorized to update this task"})
+        }
+
+        // update the task
+        await Task.findByIdAndUpdate(id, {
+            title,
+            datelines: new Date(datelines).toDateString(),
+            priority,
+            description,
+        });
+
+        res.status(200).json({status:true, message: "Task updated successfully"})
+    }
+    catch (error){
+        console.log(error)
+        return res.status(400).json({status:false, message: error.message})
+    }
+}
+
+export const taskComplete = async (req, res) => {
+    try{
+        const {id} = req.params;
+        const {userId} = req.user;
+        const { status } = req.body;
+
+        // Retrieve the current user's family members
+        const currentUser = await User.findById(userId).populate('familyId');
+        
+        // find the task by id
+        const task = await Task.findById(id);
+        if (!task) {
+            return res.status(404).json({ status: false, message: "Task not found" });
+        }
+
+        // Check if the task was created by the current user or any family member
+        if (task.created_by.toString() !== userId && (currentUser.familyId)) {
+            return res.status(403).json({ status: false, message: "Unauthorized to complete this task" });
+        }
+
+        // task complete
+        await Task.findByIdAndUpdate(id, {
+            status
+        });
+
+        //update status in Notification model to 'Canceled' if the task is updated
+        const result = await Notification.findOneAndUpdate(
+            { typeId: task._id, type: 'Task' },
+            { status: 'Canceled' },
+            { new: true } // This option returns the updated document
+        );
+
+        res.status(200).json({status:true, message: "Task completed"})
+
+    }
+    catch (error){
+        console.log(error)
+        return res.status(400).json({status:false, message: error.message})
+    }
+}
+
+export const getTaskID = async (req, res) => {
+    try {
+    
+    const { id } = req.params;
+    //console.log(`Fetching task with ID: ${id}`);
+
+    const task = await Task.findById(id)
+            .populate({
+                path: 'created_by',
+                select: 'username',
+            })
+            .populate({
+                path: 'familyId',
+                populate: {
+                    path: 'familyMembers',
+                    select: 'username email role' // Select fields to be populated
+                }
+            });
+
+    if (!task) {
+        //console.log(`Task not found for ID: ${id}`);
+        return res.status(404).json({ status: false, message: "Task not found" });
+    }
+
+    //console.log('Task found:', task);
+    res.status(200).json({ status: true, task });
+
+    }catch (error) {
+        console.log(error)
+        return res.status(400).json({ status: false, message: error.message });
+    }
+}
