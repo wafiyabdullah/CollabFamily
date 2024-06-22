@@ -21,7 +21,7 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 
 app.use(cors({
-    origin: ["http://localhost:3000"],
+    origin: ["https://collab-family-client.vercel.app"],
     method: ["GET","POST","PUT","DELETE"],
     credentials: true,
 })
