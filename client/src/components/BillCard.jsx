@@ -6,7 +6,7 @@ import { getInitials } from "../utils";
 
 import BillDialog from '../components/bill/BillDialog'
 import { formatDate } from '../utils'
-import { PRIORITY_STYLE, TASK_TYPE } from '../utils'
+import { PRIORITY_STYLE, TASK_TYPE, PRIORITY_AFTER, TASK_AFTER } from '../utils'
 
 const BillCard = ({bill}) => {
     const {user} = useSelector((state) => state.auth)
@@ -23,7 +23,7 @@ const BillCard = ({bill}) => {
             
             <div className='w-full flex justify-between mb-1'>
                 {/* priority icon */}
-                <div className={clsx("flex flex-1 gap-1 items-center text-sm font-medium", PRIORITY_STYLE[bill?.priority])}>
+                <div className={clsx("flex flex-1 gap-1 items-center text-sm font-medium", isPaid? PRIORITY_AFTER[bill?.priority] : PRIORITY_STYLE[bill?.priority])}>
                     {/*<span className='text-lg'>{ICONS[bill?.priority]}</span>*/}
                     <span className='capitalize font-bold'>{bill?.priority}</span>
                 </div>
@@ -34,13 +34,13 @@ const BillCard = ({bill}) => {
             <>
                 {/* bill title  */} 
                 <div className='flex items-center gap-2'>
-                    <div className={clsx("w-4 h-4 rounded-full", TASK_TYPE[bill.status])} />
-                    <h4 className='line-clamp-1 text-black font-semibold'>
+                    <div className={clsx("w-4 h-4 rounded-full",isPaid? TASK_AFTER[bill.status] : TASK_TYPE[bill.status])} />
+                    <h4 className={clsx('line-clamp-1 ', isPaid? 'line-through text-gray-400 text-sm' : 'text-black font-bold')}>
                         {bill?.title}
                     </h4>
                 </div>
                 {/* task description */} 
-                <p className='text-sm text-gray-600 overflow-x-auto mt-2'>
+                <p className={clsx('text-sm overflow-x-auto mt-2', isPaid? 'line-through text-gray-400' : 'text-gray-600')}>
                     <span>RM: {bill?.amount || "No description"}</span>
                 </p>
             </> 
@@ -50,16 +50,16 @@ const BillCard = ({bill}) => {
                     {/* left side*/}
                     <div className='flex items-center gap-3'>
                         {/* date */}
-                        <span className='text-sm text-gray-600 font-medium'>
-                            Due: <span className='underline'>{formatDate(new Date(bill?.datelines))}</span>
+                        <span className={clsx('text-sm  font-medium', isPaid? 'text-gray-400 line-through' : 'text-gray-600')}>
+                            Due: <span className={clsx(isPaid? '' : 'underline')}>{formatDate(new Date(bill?.datelines))}</span>
                         </span>
                     </div>
                     {/* right side*/}
                     <div className='flex items-center justify-center gap-2'>
                         {/* created by */}
-                        <div className='text-sm text-gray-500'>by:</div>
+                        <div className={clsx('text-sm ', isPaid? 'text-gray-400 line-through' : 'text-gray-600')}>by:</div>
                         {/* user */}
-                        <div className={"w-7 h-7 rounded-full text-white flex items-center justify-center text-sm -mr-1 bg-slate-500"} >
+                        <div className={clsx("w-7 h-7 rounded-full text-white flex items-center justify-center text-sm -mr-1 ", isPaid? 'bg-gray-300' : 'bg-slate-500')} >
                             <span className='text-center'>
                                 {getInitials(bill?.created_by?.username)}
                             </span>

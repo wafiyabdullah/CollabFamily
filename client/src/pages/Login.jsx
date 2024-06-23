@@ -82,7 +82,7 @@ const Login = () => {
               </p>
 
               <div className='cell'> 
-                  <Lottie loop={true} animationData={loginpageAni}/>
+                  <Lottie loop={true} animationData={loginpageAni} style={{ width: '100%', height: '100%' }}/>
               </div>
           </div>
         </div>

@@ -41,13 +41,26 @@ export const PRIORITY_STYLE = {
     Medium: "text-yellow-600",
     Low: "text-green-600",
   };
-  
+
+export const PRIORITY_AFTER = {
+    High: "text-red-300",
+    Medium: "text-yellow-300",
+    Low: "text-green-300",
+  };
+
 export const TASK_TYPE = {
     Complete: "bg-green-600",
     Incomplete: "bg-red-600",
     Unpaid: "bg-red-600",
     Paid: "bg-green-600",
   };
+
+export const TASK_AFTER = {
+    Complete: "bg-green-300",
+    Incomplete: "bg-red-300",
+    Unpaid: "bg-red-300",
+    Paid: "bg-green-300",
+};
   
 export const BGS = [
     "bg-blue-600",
