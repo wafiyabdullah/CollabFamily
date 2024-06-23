@@ -175,7 +175,7 @@ export const updateBill = async (req, res) => {
     try{
         const {id} = req.params;
         const {userId} = req.user;
-        const { title, amount, datelines, priority} = req.body;
+        const { title, amount, datelines, priority, status} = req.body;
 
         // find the bill by id
         const bill = await Bill.findById(id);
@@ -194,6 +194,7 @@ export const updateBill = async (req, res) => {
         await Bill.findByIdAndUpdate(id, {
             title,
             amount,
+            status,
             datelines: new Date(datelines).toDateString(),
             priority,
         });
