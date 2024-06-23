@@ -1,5 +1,5 @@
 import Bill from '../models/bill.js';
-import User from '../models/User.js';
+import User from '../models/user.js';
 import Family from "../models/family.js";
 import Notification from '../models/notification.js';
 
@@ -60,7 +60,7 @@ export const createBill = async (req, res) => {
             })
         }
 
-        res.status(200).json({status:true, message: "Bill created successfully", bill})
+        res.status(200).json({status:true, message: "Bill created", bill})
 
     }
     catch (error){
@@ -158,7 +158,14 @@ export const deleteBill = async (req, res) => {
             { $pull: { bills: id } }
         );
 
-        res.status(200).json({status:true, message: "Bill deleted successfully"})
+        // Update the notification status to 'canceled' if the bill is deleted
+        const result = await Notification.findOneAndUpdate(
+            { typeId: bill._id, type: 'Bill' },
+            { status: 'Canceled' },
+            { new: true }
+        );
+
+        res.status(200).json({status:true, message: "Bill deleted"})
     }
     catch (error){
         console.log(error)
@@ -233,7 +240,7 @@ export const billPaid = async (req, res) => {
             { new: true }
         );
 
-        res.status(200).json({status:true, message: "Bill paid successfully"})
+        res.status(200).json({status:true, message: "Bill paid"})
 
     }
     catch (error){

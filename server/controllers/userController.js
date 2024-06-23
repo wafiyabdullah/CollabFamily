@@ -1,7 +1,8 @@
-import User from '../models/User.js';
+import User from '../models/user.js';
 import Family from "../models/family.js";
 import Task from "../models/task.js";
 import Bill from "../models/bill.js";
+import Notification from '../models/notification.js';
 import { createJWT, generateFamilyId } from "../utils/index.js";
 
 export const registerUser = async (req, res) => {
@@ -72,7 +73,7 @@ export const loginUser = async (req, res) => {
             if (!user.familyId) {
                 return res
                     .status(403)
-                    .json({ status: false, message: "You need to be added to a family by your parent to log in" });
+                    .json({ status: false, message: "Your parent needs to add you to a family before you can log in" });
             }
         }
         
@@ -243,7 +244,7 @@ export const registerFamily = async (req, res) => {
         if (!['mother', 'father'].includes(currentUser.role)) {
             return res
                 .status(403)
-                .json({ status: false, message: "Only users with the role of 'mother' or 'father' can add family members" });
+                .json({ status: false, message: "Only parent can add family members" });
         }
 
         // check if user already exists
@@ -303,7 +304,7 @@ export const removeFamilyMember = async (req, res) => {
 
         // Check if the current user has the role of 'mother' or 'father'
         if (!['mother', 'father'].includes(currentUser.role)) {
-            return res.status(403).json({ status: false, message: "Only users with the role of 'mother' or 'father' can remove family members" });
+            return res.status(403).json({ status: false, message: "Only parent can remove family members" });
         }
 
         // Ensure the user belongs to a family
@@ -336,6 +337,7 @@ export const removeFamilyMember = async (req, res) => {
         // Remove the family ID from the specified family member
         familyMember.familyId = null;
 
+
         // Save the specified family member's updated familyId
         await familyMember.save();
 
@@ -344,8 +346,6 @@ export const removeFamilyMember = async (req, res) => {
 
         // Delete all bills created by the family member
         await Bill.deleteMany({ created_by: id, familyId: currentUser.familyId });
-
-        //remove user from received notifications even task and bill
         
 
         res.status(200).json({ status: true, message: "Family member removed successfully" });

@@ -1,5 +1,6 @@
 import mongoose,{ Schema } from "mongoose";
 import Notification from "./notification.js";
+import User from "./user.js";
 
 const taskSchema = new Schema({ 
     title: {type: String, required: true},
@@ -26,6 +27,7 @@ taskSchema.pre('remove', async function(next) {
     await Notification.deleteMany({ type: 'Task', typeId: this._id });
     next();
 });
+
 
 const Task = mongoose.model("Task", taskSchema);
 

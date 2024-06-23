@@ -2,6 +2,7 @@ import cron from 'node-cron';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 import Notification from '../models/notification.js';
+import Family from '../models/family.js';
 import Task from '../models/task.js';
 import Bill from '../models/bill.js';
 

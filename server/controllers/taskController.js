@@ -1,5 +1,5 @@
 import Task from '../models/task.js';
-import User from '../models/User.js';
+import User from '../models/user.js';
 import Family from "../models/family.js";
 import Notification from '../models/notification.js';
 
@@ -61,7 +61,7 @@ export const createTask = async (req, res) => {
             })
         }
 
-        res.status(200).json({status:true, message: "Task created successfully", task})
+        res.status(200).json({status:true, message: "Task created", task})
     }
     catch (error){
         console.log(error)
@@ -164,7 +164,14 @@ export const deleteTask = async (req, res) => {
             { $pull: { tasks: id } }
         );
 
-        res.status(200).json({status:true, message: "Task deleted successfully"})
+        //update status in Notification model to 'Canceled' if the task is deleted
+        const result = await Notification.findOneAndUpdate(
+            { typeId: task._id, type: 'Task' },
+            { status: 'Canceled' },
+            { new: true } // This option returns the updated document
+        );
+
+        res.status(200).json({status:true, message: "Task deleted"})
     }
     catch (error){
         console.log(error)
