@@ -80,15 +80,10 @@ const ChangePassword = ({open, setOpen}) => {
                     />
                 </div>
                 <div className='py-6 sm:flex sm:flex-row-reverse gap-4'>
-                            { isLoading ? (
-                                <div>
-                                    <Loading />
-                                </div>
-                            ) : (
                             <>
                             {/*save button  */}
                             <Button
-                                label='Save'
+                                label={isLoading ? (<Loading/>) : 'Save'}
                                 type='submit'
                                 className='bg-violet-700 px-8 text-sm font-semibold text-white hover:bg-violet-600  sm:w-auto'
                             />
@@ -100,7 +95,7 @@ const ChangePassword = ({open, setOpen}) => {
                                 label='Cancel'
                             />
                             </>
-                            )}
+                           
                     </div>
 
             </form>

@@ -130,11 +130,11 @@ const Login = () => {
             />
 
             {/*Button for submit*/}
-            {isLoginLoading ? <Loading/> : <Button 
+            <Button 
+              label={isLoginLoading ? (<Loading/>) : 'login'}
               type='submit'
-              label='submit'
               className='w-full h-10 bg-violet-700 text-white'
-            />}
+            />
             <span className='text-sm text-gray-500'>New to this?
               <span className='text-sm text-gray-500 hover:text-violet-600 hover:underline cursor-pointer' onClick={() => setIsRegisterMode(true) }> Register now</span>
             </span>
@@ -147,7 +147,7 @@ const Login = () => {
             >
               <div className=''>
                 <p className='text-violet-700 text-3xl font-bold text-center'>
-                  welcome!
+                  Welcome!
                 </p>
                 <p className='text-center text-base text-gray-400'>
                   Register your account
@@ -201,11 +201,11 @@ const Login = () => {
                   })}
                   error = {errors.password ? errors.password.message : ""}
                 />
-                {isRegisterLoading ? <Loading/> : <Button 
+                <Button 
+                  label={isRegisterLoading ? (<Loading/>) : 'register'}
                   type='submit'
-                  label='submit'
                   className='w-full h-10 bg-violet-700 text-white'
-                />}
+                />
                 <span className='text-sm text-gray-500'>Already have an account?
                   <span className='text-sm text-gray-500 hover:text-violet-600 hover:underline cursor-pointer' onClick={() => setIsRegisterMode(false) }> Login now</span>
                 </span>
@@ -216,7 +216,7 @@ const Login = () => {
         }
         </div>
 
-
+        
 
       </div>
       

@@ -5,8 +5,6 @@ const Loading = () => {
             <div className="dot"></div>
             <div className="dot"></div>
             <div className="dot"></div>
-            <div className="dot"></div>
-            <div className="dot"></div>
         </div> 
     )
 }

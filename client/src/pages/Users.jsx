@@ -134,8 +134,6 @@ const Users = () => {
     <AddUser 
       open={open}
       setOpen={setOpen}
-      userData={selected}
-      key={new Date().getTime().toString()}
     />
     <RemoveUser 
       open={openDialog}

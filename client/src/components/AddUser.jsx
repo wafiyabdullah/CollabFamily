@@ -78,16 +78,12 @@ const AddUser = ({ open, setOpen, userData }) => {
 
           </div>
 
-          {isLoading  ? (
-            <div className='py-5'>
-              <Loading />
-            </div>
-          ) : (
             <div className='py-3 mt-4 sm:flex sm:flex-row-reverse'>
               <Button
+                label={isLoading? (<Loading/>) : 'Submit'}
                 type='submit'
                 className='bg-violet-600 px-8 text-sm font-semibold text-white hover:bg-violet-700  sm:w-auto'
-                label='Submit'
+                
               />
 
               <Button
@@ -97,7 +93,7 @@ const AddUser = ({ open, setOpen, userData }) => {
                 label='Cancel'
               />
             </div>
-          )}
+         
         </form>
       </ModalWrapper>
     </>

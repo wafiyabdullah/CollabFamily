@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import { useSelector } from 'react-redux'
 import { toast } from 'sonner'
-import moment from 'moment'
 import { IoIosRefresh } from "react-icons/io";
 import clsx from 'clsx';
 
@@ -77,6 +76,8 @@ const Admin = () => {
     'Canceled': 'bg-slate-200'
   }
 
+  const dataHeader = data?.response?.notifications? data.response.notifications : []
+  
   return (
     <>
     <div className='w-full'>
@@ -98,7 +99,7 @@ const Admin = () => {
                 <TableHeader/>
                 {/*mapping data from tableRow into layout */}
                 <tbody>
-                  {data?.map((noti,index) => (
+                  {dataHeader.map((noti,index) => (
                     <TableRow key={index} noti={noti} />
                   ))}
                 </tbody>

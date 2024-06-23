@@ -94,19 +94,14 @@ const Profile = ({open, setOpen}) => {
                     
                         <div className='py-6 sm:flex sm:flex-row-reverse gap-4'>
                         
-                        {isLoading ? (
-                            <div className=''>
-                                <Loading /> 
-                            </div>
-                        ) : (
                             <>
                                 <Button
-                                    label='Save'
+                                    label={isLoading ? (<Loading/>) : 'Save'}
                                     type='submit'
                                     className='bg-violet-700 px-8 text-sm font-semibold text-white hover:bg-violet-600  sm:w-auto'
                                 />
                             </>
-                        )}
+                        
                             {/*cancel button  */}
                             <Button
                                 type='button'

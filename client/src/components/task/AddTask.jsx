@@ -10,6 +10,7 @@ import Textbox from '../Textbox'
 import SelectList from '../SelectList'
 import Button from '../Button'
 import {dateFormatter} from '../../utils/index'
+import Loading from '../Loader'
 
 //Redux API
 import { useCreateTaskMutation, useUpdateTaskMutation } from '../../redux/slices/api/taskApiSlice'
@@ -135,10 +136,10 @@ const AddTask = ({open, setOpen, task}) => {
             <div className='py-6 sm:flex sm:flex-row-reverse gap-4'>
                 {/*submit button  */}
                 <Button
-                     
-                      label='Submit'
-                      type='submit'
-                      className='bg-violet-700 px-8 text-sm font-semibold text-white hover:bg-violet-600  sm:w-auto'
+                  label={isLoading || isUpdating ? (<Loading />) : 'Submit'}
+                  type='submit'
+                  className='bg-violet-700 px-8 text-sm font-semibold text-white hover:bg-violet-600 sm:w-auto'
+                  disabled={isLoading || isUpdating}
                 />
                 {/*cancel button  */}
                 <Button
@@ -146,7 +147,8 @@ const AddTask = ({open, setOpen, task}) => {
                     className='bg-white px-5 text-sm font-semibold text-gray-900 sm:w-auto hover:text-red-500'
                     onClick={() => setOpen(false)}
                     label='Cancel'
-                  />
+                  /> 
+                  
             </div>
            
           </div>

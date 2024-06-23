@@ -10,6 +10,7 @@ import Textbox from '../Textbox'
 import SelectList from '../SelectList'
 import Button from '../Button'
 import {dateFormatter} from '../../utils/index'
+import Loading from '../Loader'
 
 //Redux API
 import { useCreateBillMutation, useUpdateBillMutation } from '../../redux/slices/api/billApiSlice'
@@ -130,7 +131,7 @@ const AddBill = ({open, setOpen, bill}) => {
                         <div className='py-6 sm:flex sm:flex-row-reverse gap-4'>
                             {/*submit button  */}
                             <Button
-                                label='Submit'
+                                label={isLoading || isUpdating ? (<Loading/>) : 'Submit'}
                                 type='submit'
                                 className='bg-violet-700 px-8 text-sm font-semibold text-white hover:bg-violet-600  sm:w-auto'
                             />
