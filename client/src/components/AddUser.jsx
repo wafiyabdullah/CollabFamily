@@ -88,7 +88,7 @@ const AddUser = ({ open, setOpen, userData }) => {
 
               <Button
                 type='button'
-                className='bg-white px-5 text-sm font-semibold text-gray-900 sm:w-auto'
+                className='bg-white px-5 text-sm font-semibold text-gray-900 sm:w-auto hover:text-red-500'
                 onClick={() => setOpen(false)}
                 label='Cancel'
               />
