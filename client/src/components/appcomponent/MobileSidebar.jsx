@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Transition } from '@headlessui/react';
 import clsx from 'clsx';
 import { IoClose } from 'react-icons/io5';
-import { setOpenSidebar } from '../redux/slices/authSlice';
-import Sidebar from '../components/Sidebar';
+import { setOpenSidebar } from '../../redux/slices/authSlice';
+import Sidebar from '../Sidebar';
 
 //mobile view
 const MobileSidebar = () => {

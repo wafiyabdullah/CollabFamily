@@ -1,8 +1,8 @@
 import React from 'react';
 import { Outlet, Navigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import Sidebar from '../components/Sidebar';
-import Navbar from '../components/Navbar';
+import Sidebar from '../Sidebar';
+import Navbar from '../Navbar';
 import MobileSidebar from './MobileSidebar';
 
 const Layout = () => {

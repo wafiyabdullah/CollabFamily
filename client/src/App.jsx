@@ -1,17 +1,8 @@
 import {
-  Navigate,
-  Outlet,
   Route,
   Routes,
-  useLocation
 } from "react-router-dom"
 import {Toaster} from 'sonner'
-import { useSelector, useDispatch } from 'react-redux'
-import { setOpenSidebar } from "./redux/slices/authSlice"
-import { useRef, Fragment } from "react"
-import clsx from "clsx"
-import { Transition } from "@headlessui/react"
-import { IoClose } from "react-icons/io5";
 
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
@@ -21,8 +12,8 @@ import Bill from './pages/Bill'
 import TaskDetails from './pages/TaskDetails'
 import BillDetails from './pages/BillDetails'
 import Admin from './pages/Admin'
-import RoleBasedRedirect from './pages/RoleBasedRedirect'
-import Layout from './pages/Layout'
+import RoleBasedRedirect from './components/appcomponent/RoleBasedRedirect'
+import Layout from './components/appcomponent/Layout'
 
 // App component routes
 function App() {

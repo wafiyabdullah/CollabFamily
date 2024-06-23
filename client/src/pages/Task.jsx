@@ -114,9 +114,9 @@ const Task = () => {
             onChange={(e) => setSortCriteria(e.target.value)}
           >
             <option value='All'>All</option>
-            <option value='ClosestDatelines'>Sort by Closest Datelines</option>
-            <option value='HighPriority'>Sort by High Priority</option>
-            <option value='Incomplete'>Sort by Incomplete</option>
+            <option value='ClosestDatelines'>Closest Datelines</option>
+            <option value='HighPriority'>High Priority</option>
+            <option value='Incomplete'>Incomplete</option>
           </select>
         </div>
       </div>

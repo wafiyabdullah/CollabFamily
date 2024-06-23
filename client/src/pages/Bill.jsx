@@ -118,9 +118,9 @@ const Bill = () => {
             onChange={(e) => setSortCriteria(e.target.value)}
           >
             <option value='All'>All</option>
-            <option value='ClosestDatelines'>Sort by Closest Datelines</option>
-            <option value='HighPriority'>Sort by High Priority</option>
-            <option value='Unpaid'>Sort by Unpaid</option>
+            <option value='ClosestDatelines'>Closest Datelines</option>
+            <option value='HighPriority'>High Priority</option>
+            <option value='Unpaid'>Unpaid</option>
           </select>
         </div>
       </div> 

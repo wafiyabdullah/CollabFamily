@@ -1,6 +1,4 @@
-import React from 'react'
-import { useState } from 'react'
-import { useEffect } from 'react'
+import React,{ useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { toast } from 'sonner'
 
@@ -10,7 +8,7 @@ import Button from '../components/Button'
 import Title from '../components/Title'
 import { getInitials } from '../utils'
 import AddUser from '../components/AddUser'
-import {RemoveUser} from '../components/Dialogs'
+import { RemoveUser } from '../components/Dialogs'
 import Loading from '../components/Loader'
 
 import { useGetFamilyListQuery, useRemoveFamilyMemberMutation } from '../redux/slices/api/userApiSlice'
@@ -98,8 +96,6 @@ const Users = () => {
   )
 
   return (
-    
-   
     <>
       <div className='w-full md:px-1 px-0 mb-6'>
       {/*family members title and add family button */}

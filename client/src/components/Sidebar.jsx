@@ -94,11 +94,12 @@ const Sidebar = () => {
 
     {/*trademark*/}
     <div className='justify-center text-center'>
-      <span className='w-full flex gap-2 p-2 items-center text-lg text-gray-800 justify-center'>
-        
+      <span className='w-full flex gap-1 p-1 items-center text-lg text-gray-800 justify-center'>
         <span className='text-sm text-gray-400 '>CollabFamily © 2024</span>
       </span>
+      <p className='text-sm text-gray-300'>version 1.0</p>
     </div>
+    
   </div>
   );
 };
