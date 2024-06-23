@@ -76,7 +76,7 @@ const Login = () => {
             <span className='flex gap-1 py-1 px-3 border rounded-full text-sm md:text-base border-violet-300 text-gray-600'>
               Collaborative!
               </span>
-              <p className='flex flex-col gap-0 md:gap-4 text-4xl md:text-6xl 2xl:text-7xl font-black text-center text-violet-700'>
+              <p className='flex flex-col gap-0 md:gap-4 font-extrabold text-4xl md:text-6xl 2xl:text-7xl text-center bg-clip-text text-transparent bg-gradient-to-r from-violet-500 to-violet-900'>
                 <span>Family Management</span>
                 <span>System</span>
               </p>
@@ -220,6 +220,9 @@ const Login = () => {
 
       </div>
       
+      <div className='absolute bottom-0 w-full text-center p-4'>
+        <p className='text-sm text-gray-400'>&copy; {new Date().getFullYear()} CollabFamily . version 1.0</p>
+      </div>
     </div>
     
     </>
