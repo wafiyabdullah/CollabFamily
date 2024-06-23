@@ -24,14 +24,13 @@ const statusref = {
 const Task = () => {
 
   const params = useParams() // this is for getting the params from the url
-
   const [isLoading, setIsLoading] = useState(true)
   const [open, setOpen] = useState(false)
-
+  const [sortCriteria, setSortCriteria] = useState('All');
+  const [filteredTasks, setFilteredTasks] = useState([]);
   const status = params?.status || "" // this is for getting the status from the url
   //API LOGIC START
   const user = useSelector((state) => state.auth.user) //get user from redux store
-
   const {data, refetch, isFetching} = useGetTaskQuery() //fetch data from api
 
   useEffect(() => {
@@ -51,14 +50,39 @@ const Task = () => {
     fetchData();
   }, [user, refetch]);
 
-  const refreshPage = () => {
-    refetch()
-    toast.info("data refreshed")
-  }
+  useEffect(() => {
+    let sortedTasks = [...data?.tasks || []];
 
-  const tasks = data?.tasks || [];
+    switch (sortCriteria) {
+      case 'ClosestDatelines':
+        sortedTasks.sort((a, b) => new Date(a.datelines) - new Date(b.datelines));
+        break;
+      case 'HighPriority':
+        sortedTasks.sort((a, b) => {
+          const priorities = { High: 1, Medium: 2, Low: 3 };
+          return priorities[a.priority] - priorities[b.priority];
+        });
+        break;
+      case 'Incomplete':
+        sortedTasks = sortedTasks.filter((task) => task.status === 'Incomplete');
+        break;
+      default:
+        break;
+    }
 
-  console.log(tasks)
+    setFilteredTasks(sortedTasks);
+  }, [sortCriteria, data]);
+
+  const refreshPage = async () => {
+    try {
+      await refetch();
+      toast.info('Data refreshed');
+    } catch (error) {
+      console.error('Error refreshing data:', error);
+    }
+  };
+
+  //console.log(tasks)
 
   //API LOGIC END
   return (
@@ -74,15 +98,26 @@ const Task = () => {
             className="flex flex-row-reverse gap-1 items-center bg-violet-700 text-white rounded-md py-2 2xl:py-2.5"
             />
       </div>
-      <div className='flex items-center w-1/4 py-4 gap-3'>
-      <div className='w-3/4 h-fit bg-green-500 shadow-md shadow-green-500/40 p-2 flex rounded justify-center items-center'>
+      <div className='w-full flex items-center py-4 gap-3'>
+        <div className='w-1/7 h-fit bg-green-500 shadow-md shadow-green-500/40 p-2 flex rounded justify-center items-center'>
               <h4 className='text-white'>{statusref.Complete}</h4>
         </div> 
-        <div className='w-3/4 h-fit bg-red-500 shadow-md shadow-red-500/40 p-2 flex rounded justify-center items-center'>
+        <div className='w-1/7 h-fit bg-red-500 shadow-md shadow-red-500/40 p-2 flex rounded justify-center items-center'>
               <h4 className='text-white'>{statusref.Incomplete}</h4>
         </div>
         <div className='rounded-full hover:bg-slate-200 p-1 flex justify-center items-center'>
           <IoIosRefresh onClick={refreshPage}/>
+        </div>
+        <div className='ml-auto border border-black'>
+          <select 
+            className='border-none focus:outline-none'
+            onChange={(e) => setSortCriteria(e.target.value)}
+          >
+            <option value='All'>All</option>
+            <option value='ClosestDatelines'>Sort by Closest Datelines</option>
+            <option value='HighPriority'>Sort by High Priority</option>
+            <option value='Incomplete'>Sort by Incomplete</option>
+          </select>
         </div>
       </div>
       {/* each task card*/}
@@ -93,7 +128,7 @@ const Task = () => {
         </div>
       ) : (
           <div className='w-full py-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 2xl:gap-4'>
-            {tasks.map((task, index) => (
+            {filteredTasks.map((task, index) => (
                 <TaskCard key={index} task={task} />
               ))}
           </div>

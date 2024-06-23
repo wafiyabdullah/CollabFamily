@@ -101,10 +101,9 @@ export const getTask = async (req, res) => {
             model: User
         })
         .sort({
-            status: -1,
-            datelines: 1,
-            priority: 1,
-        });
+            updatedAt: -1
+        })
+        
 
         //check if there are no tasks
         if (!tasks || tasks.length === 0){

@@ -28,7 +28,8 @@ const Bill = () => {
 
   const [isLoading, setIsLoading] = useState(true)
   const [open, setOpen] = useState(false)
-  
+  const [sortCriteria, setSortCriteria] = useState('All');
+  const [filteredBills, setFilteredBills] = useState([]);
   const status = params?.status || "" // this is for getting the status from the url
    //API LOGIC START
   const user = useSelector((state) => state.auth.user) //get user from redux store
@@ -52,14 +53,39 @@ const Bill = () => {
     fetchData();
   }, [user, refetch]);
 
-    const refreshPage = () => {
-      refetch()
-      toast.info("data refreshed")
+  useEffect(() => {
+    let sortedBills = [...data?.bills || []];
+
+    switch (sortCriteria) {
+      case 'ClosestDatelines':
+        sortedBills.sort((a, b) => new Date(a.datelines) - new Date(b.datelines));
+        break;
+      case 'HighPriority':
+        sortedBills.sort((a, b) => {
+          const priorities = { High: 1, Medium: 2, Low: 3 };
+          return priorities[a.priority] - priorities[b.priority];
+        });
+        break;
+      case 'Unpaid':
+        sortedBills = sortedBills.filter((bill) => bill.status === 'Unpaid');
+        break;
+      default:
+        break;
     }
 
-    const bills = data?.bills || [];
+    setFilteredBills(sortedBills);
+  }, [sortCriteria, data]);
 
-    console.log(bills)
+    const refreshPage = async () => {
+      try {
+        await refetch();
+        toast.info('Data refreshed');
+      } catch (error) {
+        console.error('Error refreshing data:', error);
+      }
+    };
+
+    //console.log(bills)
   //API LOGIC END
   return (
     
@@ -76,15 +102,26 @@ const Bill = () => {
             />
         }
       </div>
-      <div className='flex items-center w-1/4 py-4 gap-3'>
-        <div className='w-3/4 h-fit bg-green-500 shadow-md  shadow-green-500/40 p-2 flex rounded justify-center items-center'>
+      <div className='w-full flex items-center py-4 gap-3'>
+        <div className='w-1/7 h-fit bg-green-500 shadow-md  shadow-green-500/40 p-2 flex rounded justify-center items-center'>
               <h4 className='text-white '>{statusref.Paid}</h4>
         </div>
-        <div className='w-3/4 h-fit bg-red-500 shadow-md  shadow-red-500/40 p-2 flex rounded justify-center items-center'>
+        <div className='w-1/7 h-fit bg-red-500 shadow-md  shadow-red-500/40 p-2 flex rounded justify-center items-center'>
               <h4 className='text-white '>{statusref.Unpaid}</h4>
         </div> 
         <div className='rounded-full hover:bg-slate-200 p-1 flex justify-center items-center'>
           <IoIosRefresh onClick={refreshPage}/>
+        </div>
+        <div className='ml-auto border border-black'>
+          <select 
+            className='border-none focus:outline-none'
+            onChange={(e) => setSortCriteria(e.target.value)}
+          >
+            <option value='All'>All</option>
+            <option value='ClosestDatelines'>Sort by Closest Datelines</option>
+            <option value='HighPriority'>Sort by High Priority</option>
+            <option value='Unpaid'>Sort by Unpaid</option>
+          </select>
         </div>
       </div> 
       {/* each bill card*/}
@@ -94,9 +131,9 @@ const Bill = () => {
                <Loading />
              </div>
           ) : (
-            <div bill={bills} className='w-full py-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 2xl:gap-4'>
+            <div className='w-full py-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 2xl:gap-4'>
               {
-                bills.map((bill, index) => (
+                filteredBills.map((bill, index) => (
                     <BillCard key={index} bill={bill} />
                 ))
               }

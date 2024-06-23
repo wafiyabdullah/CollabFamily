@@ -100,9 +100,7 @@ export const getBill = async (req, res) => {
                 model: User
             })
             .sort({
-                status: -1,
-                datelines: 1,
-                priority: 1,
+                updatedAt: -1
             });
 
         // Check if there are no bills found
