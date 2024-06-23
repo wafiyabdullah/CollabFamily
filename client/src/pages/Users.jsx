@@ -72,7 +72,7 @@ const Users = () => {
       
       <td className='p-2'>
         <div className='flex items-center gap-3'>
-          <div className='w-9 h-9 rounded-full text-white flex items-center justify-center text-sm bg-violet-700'>
+          <div className='w-9 h-9 rounded-full text-white flex items-center justify-center text-sm bg-violet-700 '>
             <span className='text-xs md:text-sm text-center'>
               {getInitials(user.username)}
             </span>
@@ -104,7 +104,7 @@ const Users = () => {
         <Button 
           label='Add Family Member'
           icon={<IoMdAdd className='text-lg'/>}
-          className='flex flex-row-reverse gap-1 items-center bg-violet-700 rounded-md text-white py-2 2xl:py-2.5'
+          className='flex flex-row-reverse gap-1 items-center bg-violet-700 rounded-md text-white py-2 2xl:py-2.5 hover:bg-violet-800'
           onClick={() => setOpen(true)}
         />
       </div>

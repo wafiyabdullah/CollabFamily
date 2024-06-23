@@ -65,7 +65,7 @@ const Sidebar = () => {
         to={el.link}
         onClick={closeSidebar}
         className={clsx("w-full flex gap-2 px-8 py-3 items-center text-gray-800 text-base hover:bg-[#27334e2d] rounded-md", 
-        path === el.link.split("/")[0] ? "bg-violet-800 text-neutral-100 hover:bg-violet-700 " : ""
+        path === el.link.split("/")[0] ? "bg-violet-700 text-neutral-100 hover:bg-violet-800 " : ""
         )}
         >
           {el.icon}

@@ -133,7 +133,7 @@ const Login = () => {
             <Button 
               label={isLoginLoading ? (<Loading/>) : 'login'}
               type='submit'
-              className='w-full h-10 bg-violet-700 text-white'
+              className='w-full h-10 bg-violet-700 text-white hover:bg-violet-800'
             />
             <span className='text-sm text-gray-500'>New to this?
               <span className='text-sm text-gray-500 hover:text-violet-600 hover:underline cursor-pointer' onClick={() => setIsRegisterMode(true) }> Register now</span>
@@ -204,7 +204,7 @@ const Login = () => {
                 <Button 
                   label={isRegisterLoading ? (<Loading/>) : 'register'}
                   type='submit'
-                  className='w-full h-10 bg-violet-700 text-white'
+                  className='w-full h-10 bg-violet-700 text-white hover:bg-violet-800'
                 />
                 <span className='text-sm text-gray-500'>Already have an account?
                   <span className='text-sm text-gray-500 hover:text-violet-600 hover:underline cursor-pointer' onClick={() => setIsRegisterMode(false) }> Login now</span>
