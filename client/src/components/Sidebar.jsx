@@ -4,6 +4,7 @@ import {
   MdFamilyRestroom,
   
 } from "react-icons/md";
+import { FaRegCalendarAlt } from "react-icons/fa";
 import { BiMoneyWithdraw } from "react-icons/bi";
 import { FaTasks, FaUsers } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
@@ -37,7 +38,7 @@ const linkData = [
     label: "Admin Home",
     link: "admin",
     icon: <MdFamilyRestroom />,
-  }
+  },
 ];
 
 const Sidebar = () => {
