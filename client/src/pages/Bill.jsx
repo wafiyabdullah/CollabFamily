@@ -114,7 +114,6 @@ const Bill = () => {
         </div>
         <div className='ml-auto border border-black'>
           <select 
-            className='border-none focus:outline-none'
             onChange={(e) => setSortCriteria(e.target.value)}
           >
             <option value='All'>All</option>
