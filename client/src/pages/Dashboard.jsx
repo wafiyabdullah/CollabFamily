@@ -19,7 +19,7 @@ const TaskTable = ({tasks}) => {
   
   // TableHeader component
   const TableHeader = () => (
-    <thead className="border-b border-gray-300">
+    <thead className="border-b border-gray-300 ">
       <tr className='text-black text-left'>
         <th className='py-2'>Activities</th>
         <th className='py-2'>Created By</th>
@@ -112,9 +112,9 @@ const Dashboard = () => {
 
   {/* ---------------------------------------------------------------LOGIC API END--------------------------------------------------------------------------------- */}
   const tasks = data?.response ? data.response.recentActivity : [];
-  const totalPriorityTask = data?.response ? data.response.totalPriorityTask : [];
-  const totalPriorityBill = data?.response ? data.response.totalPriorityBill : [];
+  const totalPriority = data?.response ? data.response.totalPriority : [];
 
+  //console.log(totalPriority);
   const HeaderData = data?.response ? [ //array of objects
     {
       _id: "1",
@@ -151,8 +151,8 @@ const Dashboard = () => {
     return (
       <div className={clsx('w-full h-32  p-5 shadow-md rounded-md flex items-center justify-between', bg)}>
         <div className='h-full flex flex-1 flex-col justify-between'>
-          <p className='text-base text-white'>{label}</p>
-          <span className='text-2xl font-semibold text-white'>{count}</span>
+          <p className='text-base text-white font-bold'>{label}</p>
+          <span className='text-2xl font-light text-white'>{count}</span>
           <span className='text-sm text-gray-400'></span>
         </div>
       {/* Icon  */} {/*clsx is used to combine classes*/}
@@ -181,20 +181,13 @@ const Dashboard = () => {
       
       <div className='w-full flex flex-col md:flex-row gap-2 2xl:gap-2'>
       {/* task priority Chart */}
-        <div className='md:w-1/2 bg-white my-10 p-4 rounded shadow-sm border border-gray-200'>
-          <div>
-              <h4 className='text-xl text-gray-600 font-semibold'>
-                Task Priority
+        <div className='md:w-full bg-white my-10 p-4 rounded shadow-sm border border-gray-200'>
+          <div className=''>
+              <h4 className='text-xl text-gray-600 font-bold pb-4'>
+                Priority Bar Chart
               </h4>
-            <Chart data = {totalPriorityTask}/> 
+            <Chart data = {totalPriority}/> 
           </div>  
-        </div>
-        {/* Bill priority Chart */}
-        <div className='md:w-1/2 bg-white my-10 p-4 rounded shadow-sm border border-gray-200'>
-            <h4 className='text-xl text-gray-600 font-semibold '>
-              Bill Priority
-            </h4>
-           <Chart data = {totalPriorityBill}/>
         </div>
       </div>
 

@@ -78,22 +78,6 @@ export const getDashboard = async (req, res) => {
             familyId: family._id,
             priority: "Low"
         });
-        
-        const totalPriorityTask = [
-            {
-                name: "High",
-                total: totalHighPriorityTaskCount,
-            },
-            {
-                name: "Medium",
-                total: totalMediumPriorityTaskCount,
-            },
-            {
-                name: "Low",
-                total: totalLowPriorityTaskCount,
-            }
-        ]
-
         //total priority bill count
         const totalHighPriorityBillCount = await Bill.countDocuments({
             familyId: family._id,
@@ -107,21 +91,25 @@ export const getDashboard = async (req, res) => {
             familyId: family._id,
             priority: "Low"
         });
-
-        const totalPriorityBill = [
+        
+        const totalPriority = [
             {
                 name: "High",
-                total: totalHighPriorityBillCount,
+                task: totalHighPriorityTaskCount,
+                bill: totalHighPriorityBillCount,
             },
             {
                 name: "Medium",
-                total: totalMediumPriorityBillCount,
+                task: totalMediumPriorityTaskCount,
+                bill: totalMediumPriorityBillCount,
             },
             {
                 name: "Low",
-                total: totalLowPriorityBillCount,
+                task: totalLowPriorityTaskCount,
+                bill: totalLowPriorityBillCount,
             }
         ]
+
 
         //recent activity for task and bill in one group limit 5
         const recentActivity = await Promise.all([
@@ -156,8 +144,7 @@ export const getDashboard = async (req, res) => {
             totalBillCount: totalBillCount.length > 0 ? totalBillCount[0].totalAmount : 0,
             totalDueTaskCount,
             totalDueBillCount,
-            totalPriorityTask,
-            totalPriorityBill,
+            totalPriority,
             recentActivity: combinedRecentActivity,
         };
 
