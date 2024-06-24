@@ -2,7 +2,7 @@ import React from 'react'
 import clsx from 'clsx'
 
 
-const Textbox = React.forwardRef(({ type, placeholder, label, className, register, name, error }, ref) => { //textbox component
+const Textbox = React.forwardRef(({ type, placeholder, label, className, register, name, error, step }, ref) => { //textbox component
     return (
         <div className='w-full flex flex-col gap-1'>
             {label && <label htmlFor={name} className='text-slate-800'>{label}</label>} {/*label for textbox*/}
@@ -11,6 +11,7 @@ const Textbox = React.forwardRef(({ type, placeholder, label, className, registe
                 type={type} 
                 name={name}
                 placeholder={placeholder} 
+                step={step}
                 ref={ref}
                 {...register} //register for form
                 aria-invalid={error ? "true" : "false"} //error message

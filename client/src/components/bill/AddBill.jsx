@@ -93,6 +93,7 @@ const AddBill = ({open, setOpen, bill}) => {
                         type='number'
                         name='amount'
                         label= 'Amount'
+                        step='0.01'
                         className='w-full rounded'
                         register={register("amount", {required: "amount is required"})}
                         error = {errors.amount ? errors.amount.message : ""}
