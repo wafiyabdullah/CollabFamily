@@ -9,6 +9,7 @@ import { Dialog } from '@headlessui/react'
 import Textbox from './Textbox'
 import Button from './Button'
 import Loading from './Loader'
+import { getInitials } from '../utils/index'
 
 const Profile = ({open, setOpen}) => {
     const { user } = useSelector((state) => state.auth);
@@ -57,7 +58,11 @@ const Profile = ({open, setOpen}) => {
                     >
                         Update Profile
                     </Dialog.Title>
-                
+                    <div className='flex justify-center items-center'>
+                        <div className='w-40 h-40 flex items-center justify-center rounded-full bg-violet-700'>
+                            <div className='text-center text-white 2xl:text-5xl'>{getInitials(user?.username)}</div>
+                        </div>
+                    </div>
                     <div className='mt-2 flex flex-col gap-6'>
                         {/*username  */}
                         <Textbox
