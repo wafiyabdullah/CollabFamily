@@ -192,7 +192,7 @@ const Dashboard = () => {
       </div>
 
       {/*Task */}    
-      <div className='w-full flex flex-col md:flex-row gap-4 2xl:gap-10'>
+      <div className='w-3/4 flex flex-col md:flex-row gap-4 2xl:gap-10'>
           {/*left side*/}
            <TaskTable tasks = {tasks}/>
 
