@@ -23,7 +23,7 @@ function App() {
   const {user} = useSelector((state) => state.auth)
   const isAdmin = user?.role === 'admin'
   return(
-    <main className={clsx('w-full min-h-screen', isAdmin ? 'bg-[#e7b5f1]' : 'bg-[#f3f4f6]')}>
+    <main className={clsx('w-full min-h-screen', isAdmin ? 'bg-violet-400' : 'bg-[#f3f4f6]')}>
       <Routes>
         <Route path="/" element={<RoleBasedRedirect />} />
         <Route element={<Layout />}>
