@@ -103,10 +103,10 @@ const Bill = () => {
         }
       </div>
       <div className='w-full flex items-center py-4 gap-3'>
-        <div className='w-1/7 h-fit bg-green-500 shadow-md  shadow-green-500/40 p-2 flex rounded justify-center items-center'>
+        <div className='w-24 h-11 bg-green-500 shadow-md  shadow-green-500/40 p-2 flex rounded justify-center items-center'>
               <h4 className='text-white '>{statusref.Paid}</h4>
         </div>
-        <div className='w-1/7 h-fit bg-red-500 shadow-md  shadow-red-500/40 p-2 flex rounded justify-center items-center'>
+        <div className='w-24 h-11 bg-red-500 shadow-md  shadow-red-500/40 p-2 flex rounded justify-center items-center'>
               <h4 className='text-white '>{statusref.Unpaid}</h4>
         </div> 
         <div className='cursor-pointer rounded-full hover:bg-slate-200 p-1 flex justify-center items-center'>
