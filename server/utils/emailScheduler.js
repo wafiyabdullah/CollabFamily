@@ -17,8 +17,8 @@ var transporter = nodemailer.createTransport({
 })
 
 async function scheduleEmail() {
-    // Schedule email to be sent at 8:29 PM every day
-    cron.schedule('25 4 * * *', async function() { 
+    // Schedule email to be sent at 8:25 AM everyday
+    cron.schedule('25 8 * * *', async function() { 
         
         try{
 
