@@ -37,15 +37,15 @@ export function dateFormatter(dateString) {
   }
   
 export const PRIORITY_STYLE = {
-    High: "text-red-600",
-    Medium: "text-yellow-600",
-    Low: "text-green-600",
+    High: "text-red-600 bg-red-200",
+    Medium: "text-yellow-600 bg-yellow-200",
+    Low: "text-green-600  bg-green-200",
   };
 
 export const PRIORITY_AFTER = {
-    High: "text-red-300",
-    Medium: "text-yellow-300",
-    Low: "text-green-300",
+    High: "text-red-300 bg-red-100",
+    Medium: "text-yellow-300 bg-yellow-100",
+    Low: "text-green-300 bg-green-100",
   };
 
 export const TASK_TYPE = {

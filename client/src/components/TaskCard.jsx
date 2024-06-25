@@ -28,7 +28,7 @@ const TaskCard = ({task}) => {
       
         <div className='w-full flex justify-between mb-1'>
             {/* priority icon */}
-            <div className={clsx("flex flex-1 gap-1 items-center text-sm font-medium", isComplete ? PRIORITY_AFTER[task?.priority] : PRIORITY_STYLE[task?.priority])}>
+            <div className={clsx("flex gap-1 items-center text-sm font-medium px-2 py-1 rounded-full", isComplete ? PRIORITY_AFTER[task?.priority] : PRIORITY_STYLE[task?.priority])}>
                 {/*<span className='text-lg'>{ICONS[task?.priority]}</span>*/}
                 <span className='capitalize font-bold'>{task?.priority}</span>
             </div>

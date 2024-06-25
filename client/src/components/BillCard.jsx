@@ -29,7 +29,7 @@ const BillCard = ({bill}) => {
             
             <div className='w-full flex justify-between mb-1'>
                 {/* priority icon */}
-                <div className={clsx("flex flex-1 gap-1 items-center text-sm font-medium", isPaid? PRIORITY_AFTER[bill?.priority] : PRIORITY_STYLE[bill?.priority])}>
+                <div className={clsx("flex gap-1 items-center text-sm font-medium px-2 py-1 rounded-full", isPaid? PRIORITY_AFTER[bill?.priority] : PRIORITY_STYLE[bill?.priority])}>
                     {/*<span className='text-lg'>{ICONS[bill?.priority]}</span>*/}
                     <span className='capitalize font-bold'>{bill?.priority}</span>
                 </div>
