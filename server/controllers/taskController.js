@@ -243,7 +243,7 @@ export const taskComplete = async (req, res) => {
         //update status in Notification model to 'Canceled' if the task is updated
         const result = await Notification.findOneAndUpdate(
             { typeId: task._id, type: 'Task' },
-            { status: 'Canceled' },
+            { status: 'Complete' },
             { new: true } // This option returns the updated document
         );
 

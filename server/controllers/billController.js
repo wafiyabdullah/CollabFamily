@@ -235,7 +235,7 @@ export const billPaid = async (req, res) => {
         // Update the notification status to 'canceled' if the bill is paid
         const result = await Notification.findOneAndUpdate(
             { typeId: id, type: "Bill" },
-            { status: "Canceled" },
+            { status: "Complete" },
             { new: true }
         );
 

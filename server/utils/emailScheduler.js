@@ -18,12 +18,12 @@ var transporter = nodemailer.createTransport({
 
 async function scheduleEmail() {
     // Schedule email to be sent at 8:29 PM every day
-    cron.schedule('39 13 * * *', async function() { 
+    cron.schedule('59 14 * * *', async function() { 
         
         try{
 
-            // return notification with status 'waiting' and datelines tomorrow
-            const notifications = await Notification.find({ status: 'Waiting', typeDatelines: { $lte: new Date(new Date().setDate(new Date().getDate() + 1)) } })
+            // return notification with status except Complete and datelines tomorrow
+            const notifications = await Notification.find({ status: { $in: ['Waiting', 'Sent', 'Failed'] }, typeDatelines: { $lte: new Date(new Date().setDate(new Date().getDate() + 1)) } })
                 .populate('FamilyMembers', 'email')
                 .populate('FamilyId');             
                 
@@ -51,7 +51,7 @@ async function scheduleEmail() {
                         notification.status = 'Failed';
                     } else {
                         console.log('Email sent:', info.response);
-                        notification.status = 'Successful';
+                        notification.status = 'Sent';
 
                         notification.sentAt = new Date();
                         notification.successfulAt = new Date();

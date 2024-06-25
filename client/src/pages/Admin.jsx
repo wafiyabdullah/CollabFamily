@@ -143,10 +143,10 @@ const AdminPage = () => {
   };
 
   const statusNotiColor = {
-    Successful: 'bg-green-100',
-    Waiting: 'bg-yellow-100',
-    Failed: 'bg-red-100',
-    Canceled: 'bg-slate-200',
+    Complete: 'bg-green-200',
+    Waiting: 'bg-yellow-200',
+    Failed: 'bg-red-200',
+    Sent: 'bg-orange-200',
   };
 
   return (
