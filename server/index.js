@@ -21,7 +21,7 @@ const PORT = process.env.PORT || 8800;
 const app = express();
 
 const corsOptions = {
-    origin: ["https://family-management-system.netlify.app", "http://localhost:3000"],
+    origin: "https://family-management-system.netlify.app",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   };
