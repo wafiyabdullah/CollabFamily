@@ -3,7 +3,7 @@ import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 //api uri for backend
 const API_URI = process.env.NODE_ENV === 'development' 
   ? 'http://localhost:8800/api' 
-  : 'https://collab-family-server.vercel.app/api';
+  : 'https://collabfamily.onrender.com/api';
 
 //base query for api
 const baseQuery = fetchBaseQuery({ baseUrl: API_URI });
