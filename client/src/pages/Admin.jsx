@@ -152,7 +152,7 @@ const AdminPage = () => {
   return (
     <div className="w-full">
       <div className="flex items-center mb-4 gap-3">
-        <Title title="Welcome Admin" />
+        <Title title="Welcome Admin" className="text-black"/>
         <div className="rounded-full hover:bg-slate-200 p-1 flex justify-center items-center">
           <IoIosRefresh onClick={refreshPage} />
         </div>

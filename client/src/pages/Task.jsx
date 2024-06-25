@@ -90,7 +90,7 @@ const Task = () => {
     <div className='w-full'>
       {/* button and title */}
       <div className='flex items-center justify-between mb-4 '>
-        <Title title={status? `${status} Tasks`: "Manage Task"} /> {/* "status? `${status} Tasks`: "Tasks" for */}
+        <Title title={status? `${status} Tasks`: "Manage Task"} /> 
           <Button 
             onClick={() => setOpen(true)}
             label="Create Task" 
