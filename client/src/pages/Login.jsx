@@ -73,10 +73,10 @@ const Login = () => {
         {/* left side of login page*/}
         <div className='h-full w-full lg:w-2/3 flex flex-col items-center justify-center'>
           <div className='w-full md:max-w-lg 2xl:max-w-3xl flex flex-col items-center justify-center gap-5 md:gap-y-10 2xl:-mt-20'>
-            <span className='flex gap-1 py-1 px-3 border rounded-full text-sm md:text-base border-violet-300 text-gray-600'>
+            <span className='cursor-default flex gap-1 py-1 px-3 border rounded-full text-sm md:text-base border-violet-300 text-gray-600'>
               Collaborative!
               </span>
-              <p className='flex flex-col gap-0 md:gap-4 font-extrabold text-4xl md:text-6xl 2xl:text-7xl text-center bg-clip-text text-transparent bg-gradient-to-r from-violet-500 to-violet-900'>
+              <p className='cursor-default flex flex-col gap-0 md:gap-4 font-extrabold text-4xl md:text-6xl 2xl:text-7xl text-center bg-clip-text text-transparent bg-gradient-to-r from-violet-500 to-violet-900'>
                 <span>Family Management</span>
                 <span>System</span>
               </p>
@@ -94,10 +94,10 @@ const Login = () => {
           className='form-container w-full md:w-[400px] flex flex-col gap-y-8 bg-white px-10 pt-14 pb-14'
           >
             <div className=''>
-              <p className='text-violet-700 text-3xl font-bold text-center'>
+              <p className='cursor-default text-violet-700 text-3xl font-bold text-center'>
                 welcome back!
               </p>
-              <p className='text-center text-base text-gray-400'>
+              <p className='cursor-default text-center text-base text-gray-400'>
                 Login to your account
               </p>
             </div>
@@ -135,7 +135,7 @@ const Login = () => {
               type='submit'
               className='w-full h-10 bg-violet-700 text-white hover:bg-violet-800'
             />
-            <span className='text-sm text-gray-500'>New to this?
+            <span className='cursor-default text-sm text-gray-500'>New to this?
               <span className='text-sm text-gray-500 hover:text-violet-600 hover:underline cursor-pointer' onClick={() => setIsRegisterMode(true) }> Register now</span>
             </span>
 
@@ -146,10 +146,10 @@ const Login = () => {
             className='form-container w-full md:w-[500px] flex flex-col gap-y-8 bg-white px-10 pt-14 pb-14'
             >
               <div className=''>
-                <p className='text-violet-700 text-3xl font-bold text-center'>
+                <p className='cursor-default text-violet-700 text-3xl font-bold text-center'>
                   Welcome!
                 </p>
-                <p className='text-center text-base text-gray-400'>
+                <p className='cursor-default text-center text-base text-gray-400'>
                   Register your account
                 </p>
               </div>
@@ -206,7 +206,7 @@ const Login = () => {
                   type='submit'
                   className='w-full h-10 bg-violet-700 text-white hover:bg-violet-800'
                 />
-                <span className='text-sm text-gray-500'>Already have an account?
+                <span className='cursor-default text-sm text-gray-500'>Already have an account?
                   <span className='text-sm text-gray-500 hover:text-violet-600 hover:underline cursor-pointer' onClick={() => setIsRegisterMode(false) }> Login now</span>
                 </span>
               </div>
@@ -220,7 +220,7 @@ const Login = () => {
 
       </div>
       
-      <div className='absolute bottom-0 w-full text-center p-4'>
+      <div className='cursor-default absolute bottom-0 w-full text-center p-4'>
         <p className='text-sm text-gray-400'>&copy; {new Date().getFullYear()} CollabFamily . version 1.0</p>
       </div>
     </div>
