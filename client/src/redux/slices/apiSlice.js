@@ -1,7 +1,7 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 
 //api uri for backend
-const API_URI = 'http://localhost:8800/api';
+const API_URI = import.meta.env.PROD ? 'https://collabfamily.onrender.com/api' : 'http://localhost:8800/api';
 
 { /* process.env.NODE_ENV === 'production'
     ? 'https://collabfamily.onrender.com/api'
