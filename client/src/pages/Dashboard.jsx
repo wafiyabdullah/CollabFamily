@@ -23,7 +23,7 @@ const TaskTable = ({tasks}) => {
       <tr className='text-black text-left'>
         <th className='py-2'>Activities</th>
         <th className='py-2'>Created By</th>
-        <th className='py-2 hidden md:block'>Created At</th>
+        <th className='py-2 '>Created At</th>
       </tr>
     </thead>
   )
@@ -54,7 +54,7 @@ const TaskTable = ({tasks}) => {
   // TaskTable component
   return (
     <>
-      <div className='w-full md:w-2/3 bg-white px-2 md:px-4 pt-4 pb-4 shadow-md rounded'>
+      <div className='w-full bg-white px-2 md:px-4 pt-4 pb-4 shadow-md rounded'>
         <table className="w-full">
           <TableHeader />
             <tbody>
