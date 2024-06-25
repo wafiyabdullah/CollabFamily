@@ -7,6 +7,7 @@ import dbConnection from "../server/utils/index.js";
 import { routeNotFound, errorHandler } from "../server/middlewares/errorMiddlewares.js";
 import routes from "./routes/index.js";
 import { startEmailScheduler } from "./controllers/notificationController.js";
+import path from "path";
 
 dotenv.config();
 
@@ -19,6 +20,8 @@ console.log("sent email start");
 const PORT = process.env.PORT || 8800;
 
 const app = express();
+
+app.use(express.static('dist'));
 
 app.use(
   cors({
@@ -34,6 +37,11 @@ app.use(cookieParser());
 app.use(morgan("dev"));
 
 app.use("/api", routes);
+
+// Serve React app for all other routes
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve('dist', 'index.html'));
+});
 
 app.use(routeNotFound);
 app.use(errorHandler);
