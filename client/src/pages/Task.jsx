@@ -99,10 +99,10 @@ const Task = () => {
             />
       </div>
       <div className='w-full flex items-center py-4 gap-3'>
-        <div className='w-24 h-11 bg-green-500 shadow-md shadow-green-500/40 p-2 flex rounded justify-center items-center'>
+        <div className='cursor-default w-24 h-11 bg-green-500 p-2 flex rounded justify-center items-center'>
               <h4 className='text-white'>{statusref.Complete}</h4>
         </div> 
-        <div className='w-24 h-11 bg-red-500 shadow-md shadow-red-500/40 p-2 flex rounded justify-center items-center'>
+        <div className='cursor-default w-24 h-11 bg-red-500 p-2 flex rounded justify-center items-center'>
               <h4 className='text-white'>{statusref.Incomplete}</h4>
         </div>
         <div className='rounded-full hover:bg-slate-200 p-1 flex justify-center items-center cursor-pointer'>
