@@ -109,7 +109,7 @@ const Bill = () => {
         <div className='w-1/7 h-fit bg-red-500 shadow-md  shadow-red-500/40 p-2 flex rounded justify-center items-center'>
               <h4 className='text-white '>{statusref.Unpaid}</h4>
         </div> 
-        <div className='rounded-full hover:bg-slate-200 p-1 flex justify-center items-center'>
+        <div className='cursor-pointer rounded-full hover:bg-slate-200 p-1 flex justify-center items-center'>
           <IoIosRefresh onClick={refreshPage}/>
         </div>
         <div className='ml-auto border border-black'>

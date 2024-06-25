@@ -3,6 +3,7 @@ import clsx from 'clsx'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { getInitials } from "../utils";
+import { useNavigate } from 'react-router-dom';
 
 import BillDialog from '../components/bill/BillDialog'
 import { formatDate } from '../utils'
@@ -11,11 +12,16 @@ import { PRIORITY_STYLE, TASK_TYPE, PRIORITY_AFTER, TASK_AFTER } from '../utils'
 const BillCard = ({bill}) => {
     const {user} = useSelector((state) => state.auth)
     const [open, setOpen] = useState(false)
-    
+    const navigate = useNavigate();
+
     const isPaid = bill?.status === 'Paid';
 
     //console.log('Bill Status:', bill?.status);
     //console.log('Is Paid:', isPaid);
+
+    const openBillDetails = () => { 
+        navigate(`/bill/${bill._id}`);
+    }
 
     return (
     <>
@@ -35,7 +41,7 @@ const BillCard = ({bill}) => {
                 {/* bill title  */} 
                 <div className='flex items-center gap-2'>
                     <div className={clsx("w-4 h-4 rounded-full",isPaid? TASK_AFTER[bill.status] : TASK_TYPE[bill.status])} />
-                    <h4 className={clsx('line-clamp-1 ', isPaid? 'line-through text-gray-400 text-sm' : 'text-black font-bold')}>
+                    <h4 className={clsx('line-clamp-1 cursor-pointer', isPaid? 'line-through text-gray-400 text-sm' : 'text-black font-bold')} onClick={openBillDetails}>
                         {bill?.title}
                     </h4>
                 </div>

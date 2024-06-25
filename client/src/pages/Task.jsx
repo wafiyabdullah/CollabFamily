@@ -105,7 +105,7 @@ const Task = () => {
         <div className='w-1/7 h-fit bg-red-500 shadow-md shadow-red-500/40 p-2 flex rounded justify-center items-center'>
               <h4 className='text-white'>{statusref.Incomplete}</h4>
         </div>
-        <div className='rounded-full hover:bg-slate-200 p-1 flex justify-center items-center'>
+        <div className='rounded-full hover:bg-slate-200 p-1 flex justify-center items-center cursor-pointer'>
           <IoIosRefresh onClick={refreshPage}/>
         </div>
         <div className='ml-auto border border-black'>

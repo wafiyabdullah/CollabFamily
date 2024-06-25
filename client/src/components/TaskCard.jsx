@@ -3,6 +3,7 @@ import clsx from 'clsx'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { getInitials } from "../utils";
+import { useNavigate } from 'react-router-dom';
 
 import TaskDialog from '../components/task/TaskDialog'
 import { formatDate } from '../utils'
@@ -11,11 +12,15 @@ import { PRIORITY_STYLE, TASK_TYPE, PRIORITY_AFTER, TASK_AFTER } from '../utils'
 const TaskCard = ({task}) => {
     const {user} = useSelector((state) => state.auth)
     const [open, setOpen] = useState(false)
+    const navigate = useNavigate();
 
     const isComplete = task?.status === 'Complete';
     
     //console.log('Task Status:', task?.status);
     //console.log('Is Complete:', isComplete);
+    const openTaskDetails = () => { 
+        navigate(`/task/${task._id}`);
+    }
 
   return ( 
   <>
@@ -35,7 +40,7 @@ const TaskCard = ({task}) => {
         {/* task title  */}
         <div className='flex items-center gap-2'>
             <div className={clsx("w-4 h-4 rounded-full", isComplete? TASK_AFTER[task?.status] : TASK_TYPE[task?.status])}/> 
-            <h4 className={clsx('line-clamp-1', isComplete ? 'line-through text-gray-400 text-sm' : 'text-black font-bold')}>
+            <h4 className={clsx('line-clamp-1 cursor-pointer', isComplete ? 'line-through text-gray-400 text-sm' : 'text-black font-bold')} onClick={openTaskDetails}>
                 {task?.title}
             </h4>
         </div>

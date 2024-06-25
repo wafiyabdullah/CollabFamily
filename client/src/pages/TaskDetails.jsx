@@ -68,8 +68,8 @@ const TaskDetails = () => {
                     </div>
                 </div>
 
-                <div className='flex items-center gap-8 p-2 border-y border-gray-200'>
-                  <div className='space-x-2'>
+                <div className='w-full flex items-center gap-8 p-2 border-y border-gray-200 md:gap'>
+                  <div className='space-x-2 '>
                     Datelines: {new Date(task?.datelines).toDateString()}
                   </div>
                   <span className='text-gray-400'>|</span>
