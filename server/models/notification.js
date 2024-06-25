@@ -31,7 +31,7 @@ const notificationSchema = new Schema({
     }],
     status: {
         type: String,
-        enum: ['Waiting', 'Complete', 'Failed', 'Sent'],
+        enum: ['Waiting', 'Complete', 'Failed', 'Sent', 'Canceled'],
         default: 'Waiting',
     },
     sentAt: Date,

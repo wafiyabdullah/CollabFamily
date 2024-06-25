@@ -199,6 +199,12 @@ export const updateBill = async (req, res) => {
             priority,
         });
 
+        await Notification.findOneAndUpdate(
+            { typeId: bill._id, type: 'Bill' },
+            { typeTitle: title, typeDatelines: new Date(datelines).toDateString(), status: 'Waiting' },
+            { new: true }
+        )
+
         res.status(200).json({status:true, message: "Bill updated successfully"})
     }
     catch (error){

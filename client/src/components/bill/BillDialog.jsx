@@ -76,16 +76,19 @@ const BillDialog = ({bill}) => {
             label: "Open Bill",
             icon: <FaFolderOpen className='mr-2 h-5 w-5' aria-hidden='true' />,
             onClick: openBillDetails,
+            disabled: false
         },
         {
           label: "Edit",
           icon: <MdOutlineEdit className='mr-2 h-5 w-5' aria-hidden='true' />,
           onClick: () => setOpenEdit(true),
+          disabled: false
         },
         {
             label: "Paid",
             icon: <MdDone className='mr-2 h-5 w-5' aria-hidden='true' />,
             onClick: BillPaidHandler,
+            disabled: bill.status === "Paid"
         }
       ]
 
@@ -113,9 +116,10 @@ const BillDialog = ({bill}) => {
                     <Menu.Item key={el.label}>
                         {({ active }) => (
                         <button
-                            onClick={el?.onClick}
+                            onClick={el.disabled? null : el?.onClick}
                             className={`${
-                            active ? "bg-violet-700 text-white" : "text-gray-900"
+                                el.disabled ? "cursor-not-allowed  text-gray-400" :
+                                active ? "bg-violet-700 text-white" : "text-gray-900"
                             } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                         >
                             {el.icon}

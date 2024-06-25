@@ -199,6 +199,10 @@ export const updateTask = async (req, res) => {
             return res.status(401).json({status:false, message: "You are not authorized to update this task"})
         }
 
+        if(task.status == "Complete"){
+            return res.status(400).json({status:false, message: "Task already completed"})
+        }
+
         // update the task
         await Task.findByIdAndUpdate(id, {
             title,
@@ -206,6 +210,13 @@ export const updateTask = async (req, res) => {
             priority,
             description,
         });
+
+        //update notification with all update created by the user
+        await Notification.findOneAndUpdate( 
+            { typeId: task._id, type: 'Task' },
+            { typeTitle: title, typeDatelines: new Date(datelines).toDateString(), status: 'Waiting'},
+            { new: true } // This option returns the updated document
+        )
 
         res.status(200).json({status:true, message: "Task updated successfully"})
     }
