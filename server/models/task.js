@@ -17,6 +17,7 @@ const taskSchema = new Schema({
     },
     description: {type: String, required: true},
     created_by: {type: Schema.Types.ObjectId, ref: "User", required: true},
+    mentioned_user: [{type: Schema.Types.ObjectId, ref: "User"}],
     familyId: {type: Schema.Types.ObjectId, ref: "Family", required: true}, 
 },
     {timestamps: true}

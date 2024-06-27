@@ -61,7 +61,29 @@ export const TASK_AFTER = {
     Unpaid: "bg-red-300",
     Paid: "bg-green-300",
 };
-  
+
+export const CATEGORY = {
+    Utilities: "bg-blue-200 text-blue-600",
+    Loans: "bg-cyan-200 text-cyan-600",
+    Rent: "bg-purple-200 text-purple-600",
+    Insurance: "bg-green-200 text-green-600",
+    Transportation: "bg-pink-200 text-pink-600",
+    Subscriptions: "bg-fuchsia-200 text-fuchsia-600",
+    CreditCards: "bg-red-200 text-red-600",
+    Others: "bg-gray-200 text-gray-600",
+};
+
+export const CATEGORY_AFTER = {
+    Utilities: "bg-blue-100 text-blue-300",
+    Loans: "bg-cyan-100 text-cyan-300",
+    Rent: "bg-purple-100 text-purple-300",
+    Insurance: "bg-green-100 text-green-300",
+    Transportation: "bg-pink-100 text-pink-300",
+    Subscriptions: "bg-fuchsia-100 text-fuchsia-300",
+    CreditCards: "bg-red-100 text-red-300",
+    Others: "bg-gray-100 text-gray-300",
+};
+
 export const BGS = [
     "bg-blue-600",
     "bg-cyan-600",

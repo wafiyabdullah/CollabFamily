@@ -1,10 +1,12 @@
 //libraries
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
 //components
 import ModalWrapper from '../ModalWrapper'
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
 import { Dialog } from '@headlessui/react'
 import Textbox from '../Textbox'
 import SelectList from '../SelectList'
@@ -17,20 +19,27 @@ import { useCreateBillMutation, useUpdateBillMutation } from '../../redux/slices
 
 const LISTS = ["Unpaid","Paid" ]
 const PRIORITY = ["Low", "Medium", "High"]
+const CATEGORY = ["Utilities", "Loans", "Rent", "Insurance", "Transportation", "Subscriptions", "Credit Cards", "Others"]
 
-const AddBill = ({open, setOpen, bill}) => {   
-    
+const animatedComponents = makeAnimated();
+
+const AddBill = ({open, setOpen, bill, familyMembers = []}) => {   
     const defaultValues = {
         title: bill?.title || "",
         amount: bill?.amount || "",
         datelines: dateFormatter(bill?.datelines || new Date()),
         status: "",
         priority: "",
+        mentioned_user: bill?.mentioned_user || [],
+        category: "",
     }
     
     const [status, setStatus] = useState(bill?.status || LISTS[0]);
     const [priority, setPriority] = useState(bill?.priority || PRIORITY[0]);
-    
+    const [selectedOptions, setSelectedOptions] = useState(
+        bill?.mentioned_user.map(user => ({ value: user._id, label: user.username })) || []
+      );
+    const [category, setCategory] = useState(bill?.category || CATEGORY[0]);
     const [createBill, { isLoading }] = useCreateBillMutation();
     const [updateBill, { isLoading: isUpdating }] = useUpdateBillMutation();
 
@@ -38,14 +47,30 @@ const AddBill = ({open, setOpen, bill}) => {
         register, 
         handleSubmit, 
         formState: {errors},
+        reset
     } = useForm({defaultValues})
     
+    useEffect(() => {
+        if (open) {
+          reset(defaultValues);
+          setSelectedOptions(
+            bill?.mentioned_user.map(user => ({ value: user._id, label: user.username })) || []
+          );
+        }
+      }, [open, bill, reset]);
+    
+      useEffect(() => {
+        setSelectedOptions(bill?.mentioned_user.map(user => ({ value: user._id, label: user.username })) || []);
+      }, [bill]);
+
     const submitHandler = async(data) => {
         try{
             const newData = {
                 ...data,
                 status,
                 priority,
+                category,
+                mentioned_user: selectedOptions.map(option => option.value),
             };
 
             const res = bill?._id
@@ -64,6 +89,8 @@ const AddBill = ({open, setOpen, bill}) => {
             toast.error(err?.data?.message || err.error);
         }
     };
+
+    const familyMemberOptions = familyMembers.map(member => ({ value: member._id, label: member.username }));
 
     return (
         <>
@@ -87,17 +114,42 @@ const AddBill = ({open, setOpen, bill}) => {
                         register={register("title", {required: "title is required"})}
                         error = {errors.title ? errors.title.message : ""}
                         />
+                        <div className='flex gap-4'>
                         {/*amount */}
                         <Textbox
-                        placeholder='Amount'
-                        type='number'
-                        name='amount'
-                        label= 'Amount'
-                        step='0.01'
-                        className='w-full rounded'
-                        register={register("amount", {required: "amount is required"})}
-                        error = {errors.amount ? errors.amount.message : ""}
+                            placeholder='Amount'
+                            type='number'
+                            name='amount'
+                            label= 'Amount'
+                            step='0.01'
+                            className='w-full rounded'
+                            register={register("amount", {required: "amount is required"})}
+                            error = {errors.amount ? errors.amount.message : ""}
                         />
+                        {/*category */}
+                        <SelectList 
+                            label='Category' 
+                            lists={CATEGORY} 
+                            selected={category} 
+                            setSelected={setCategory}
+                        />
+                        </div>
+                        {/* family members */}
+                        <div>
+                        <label className='block text-sm font-medium text-gray-700'>
+                            Family Members
+                        </label>
+                        <Select
+                            options={familyMemberOptions}
+                            closeMenuOnSelect={false}
+                            components={animatedComponents}
+                            placeholder='Assign Family Members'
+                            value={selectedOptions}
+                            onChange={setSelectedOptions}
+                            isMulti
+                            isDisabled={Boolean(bill)}
+                        />
+                        </div>
                         <div className='flex gap-4'>
                         {/*status */}
                         <SelectList 

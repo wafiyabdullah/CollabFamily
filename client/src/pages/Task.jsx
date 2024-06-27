@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import clsx from 'clsx'
 import { toast } from 'sonner'
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
 
 import { IoMdAdd } from 'react-icons/io'
 import { IoIosRefresh } from "react-icons/io";
@@ -21,12 +23,20 @@ const statusref = {
   "Complete": "Complete",
 }
 
+const animatedComponents = makeAnimated();
+
+const taskSort = [
+  { value: 'ClosestDatelines', label: 'Closest Datelines' },
+  { value: 'HighPriority', label: 'High Priority' },
+  { value: 'Incomplete', label: 'Incomplete' },
+]
+
 const Task = () => {
 
   const params = useParams() // this is for getting the params from the url
   const [isLoading, setIsLoading] = useState(true)
   const [open, setOpen] = useState(false)
-  const [sortCriteria, setSortCriteria] = useState('All');
+  const [sortCriteria, setSortCriteria] = useState([]);
   const [filteredTasks, setFilteredTasks] = useState([]);
   const status = params?.status || "" // this is for getting the status from the url
   //API LOGIC START
@@ -51,23 +61,28 @@ const Task = () => {
   }, [user, refetch]);
 
   useEffect(() => {
-    let sortedTasks = [...data?.tasks || []];
+    let sortedTasks = [...data?.response?.tasks || []];
 
-    switch (sortCriteria) {
-      case 'ClosestDatelines':
-        sortedTasks.sort((a, b) => new Date(a.datelines) - new Date(b.datelines));
-        break;
-      case 'HighPriority':
-        sortedTasks.sort((a, b) => {
-          const priorities = { High: 1, Medium: 2, Low: 3 };
-          return priorities[a.priority] - priorities[b.priority];
-        });
-        break;
-      case 'Incomplete':
-        sortedTasks = sortedTasks.filter((task) => task.status === 'Incomplete');
-        break;
-      default:
-        break;
+    if (sortCriteria.length === 0 || sortCriteria.some(criteria => criteria.value === 'All')) {
+      // If no criteria or 'All' is selected, show all bills
+      setFilteredTasks(sortedTasks);
+      return;
+    }
+
+    const criteriaValues = sortCriteria.map(criteria => criteria.value);
+
+    // Filter based on multiple selected criteria
+    if (criteriaValues.includes('ClosestDatelines')) {
+      sortedTasks = sortedTasks.filter(task => task.status === 'Incomplete');
+      sortedTasks.sort((a, b) => new Date(a.datelines) - new Date(b.datelines));
+    }
+
+    if (criteriaValues.includes('HighPriority')) {
+      sortedTasks = sortedTasks.filter(task => task.priority === 'High');
+    }
+
+    if (criteriaValues.includes('Incomplete')) {
+      sortedTasks = sortedTasks.filter(task => task.status === 'Incomplete');
     }
 
     setFilteredTasks(sortedTasks);
@@ -81,9 +96,15 @@ const Task = () => {
       console.error('Error refreshing data:', error);
     }
   };
-
+  
+  const customStyles = {
+    control: (base) => ({
+      ...base,
+      minWidth: 200,
+      
+    }),
+  };
   //console.log(tasks)
-
   //API LOGIC END
   return (
     
@@ -109,14 +130,14 @@ const Task = () => {
           <IoIosRefresh onClick={refreshPage}/>
         </div>
         <div className='ml-auto border border-black'>
-          <select 
-            onChange={(e) => setSortCriteria(e.target.value)}
-          >
-            <option value='All'>All</option>
-            <option value='ClosestDatelines'>Closest Datelines</option>
-            <option value='HighPriority'>High Priority</option>
-            <option value='Incomplete'>Incomplete</option>
-          </select>
+        <Select
+            components={animatedComponents}
+            isMulti
+            options={taskSort}
+            value={sortCriteria}
+            onChange={setSortCriteria}
+            styles={customStyles}
+          />
         </div>
       </div>
       {/* each task card*/}
@@ -134,9 +155,10 @@ const Task = () => {
         )}
       </div>
 
-      <AddTask open={open} setOpen={setOpen} />
+      <AddTask open={open} setOpen={setOpen} familyMembers={data?.response?.familyMembers || []}/>
     </div>
 
+      
    )
 }
 

@@ -15,6 +15,7 @@ const TaskCard = ({task}) => {
     const navigate = useNavigate();
 
     const isComplete = task?.status === 'Complete';
+    const isUserMentioned = task?.mentioned_user?.some(mentionedUser => mentionedUser._id === user?._id);
     
     //console.log('Task Status:', task?.status);
     //console.log('Is Complete:', isComplete);
@@ -40,7 +41,7 @@ const TaskCard = ({task}) => {
         {/* task title  */}
         <div className='flex items-center gap-2'>
             <div className={clsx("w-4 h-4 rounded-full", isComplete? TASK_AFTER[task?.status] : TASK_TYPE[task?.status])}/> 
-            <h4 className={clsx('line-clamp-1 cursor-pointer', isComplete ? 'line-through text-gray-400 text-sm' : 'text-black font-bold')} onClick={openTaskDetails}>
+            <h4 className={clsx('line-clamp-1 cursor-pointer hover:underline', isComplete ? 'line-through text-gray-400 text-sm' : 'text-black font-bold')} onClick={openTaskDetails}>
                 {task?.title}
             </h4>
         </div>
@@ -60,16 +61,16 @@ const TaskCard = ({task}) => {
                     </span>
                 </div>
                 {/* right side*/}
-                <div className='flex items-center justify-center gap-2'>
+                {isUserMentioned && (
+                    <div className='flex items-center justify-center gap-2'>
                     {/* created by */}
-                    <div className={clsx('text-sm', isComplete ? 'text-gray-400 line-through' : 'text-gray-600')}>by:</div>
+                    <div className={clsx('text-sm', isComplete ? 'text-gray-400 line-through' : 'text-gray-600')}>to:</div>
                     {/* user */}
-                    <div className={clsx("w-7 h-7 rounded-full text-white flex items-center justify-center text-sm -mr-1 ", isComplete ? 'bg-gray-300' : 'bg-slate-500')} >
-                        <span className='text-center'>
-                        {getInitials(task?.created_by?.username)}
-                        </span>
+                    <div className={clsx("w-7 h-7 rounded-full text-white flex items-center justify-center text-sm -mr-1 ", isComplete ? 'bg-gray-300 line-through' : 'bg-slate-500')} >
+                        <span className='text-center'>You</span>
                     </div>
                 </div>
+                )}
                 
 
             </div>

@@ -5,7 +5,7 @@ import Notification from '../models/notification.js';
 
 export const createBill = async (req, res) => { 
     try{
-        const { title, amount, datelines, priority} = req.body;
+        const { title, amount, datelines, priority, mentioned_user, category} = req.body;
         const { userId } = req.user;
 
         // Retrieve the current user's family members
@@ -23,6 +23,11 @@ export const createBill = async (req, res) => {
         // Collect IDs of all family members
         const familyMemberIds = family.familyMembers.map(member => member.toString());
 
+        //validate mention users
+        const mentionedUserIds = mentioned_user && Array.isArray(mentioned_user) 
+            ? mentioned_user.filter(id => familyMemberIds.includes(id))
+            : [];
+
         const familyMembers = await User.find({ familyId: currentUser.familyId });
         const familyMemberEmails = familyMembers.map(member => member.email);
 
@@ -35,11 +40,13 @@ export const createBill = async (req, res) => {
                 status: "Unpaid",
                 familyId: family._id, // Assign the task to all family members including the current user
                 created_by: userId, // Assign the bill to the current user
+                mentioned_user: mentionedUserIds,
+                category,
         });
 
         // Update all family members to include the created bill
         await User.updateMany(
-            { _id: { $in: familyMemberIds } },
+            { _id: { $in: [...new Set([...familyMemberIds, ...mentionedUserIds])] } },
             { $push: { bills: bill._id } }
         );
 
@@ -88,14 +95,22 @@ export const getBill = async (req, res) => {
         if (!family) {
             return res.status(400).json({ status: false, message: "Family not found" });
         }
+
+        //return family members username and id
+        const familyMembers = await User.find({ familyId: currentUser.familyId }).select("username");
                 
        //retrieve all bills that belong to the user and their family members
        const bills = await Bill.find({
             familyId: family._id
         })
-            .select("title amount datelines priority status")
+            .select("title amount datelines priority status mentioned_user familyId created_by category")
             .populate({
                 path: "created_by",
+                select: "username",
+                model: User
+            })
+            .populate({
+                path: "mentioned_user",
                 select: "username",
                 model: User
             })
@@ -108,7 +123,13 @@ export const getBill = async (req, res) => {
             return res.status(404).json({ status: false, message: "No bills found" });
         }
 
-        res.status(200).json({status:true, bills}); // send response
+        res.status(200).json({
+            status:true, 
+            response: {
+                familyMembers,
+                bills
+            }
+        }); // send response
     }
     catch (error) {
         console.log(error)
@@ -262,6 +283,11 @@ export const getBillID = async (req, res) => {
             .populate({
                 path: "created_by",
                 select: "username",
+            })
+            .populate({
+                path: "mentioned_user",
+                select: "username",
+                model: User
             })
             .populate({
                 path: "familyId",

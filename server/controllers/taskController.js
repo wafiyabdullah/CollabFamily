@@ -5,7 +5,7 @@ import Notification from '../models/notification.js';
 
 export const createTask = async (req, res) => {
     try{
-        const { title, datelines, priority, description} = req.body;
+        const { title, datelines, priority, description, mentioned_user} = req.body;
         const { userId } = req.user;
 
         // Retrieve the current user's family members
@@ -24,6 +24,11 @@ export const createTask = async (req, res) => {
         // Collect IDs of all family members    
         const familyMemberIds = family.familyMembers.map(member => member.toString());
 
+        // Validate mentioned users
+        const mentionedUserIds = mentioned_user && Array.isArray(mentioned_user) 
+            ? mentioned_user.filter(id => familyMemberIds.includes(id))
+            : [];
+
         const familyMembers = await User.find({ familyId: currentUser.familyId });
         const familyMemberEmails = familyMembers.map(member => member.email);
 
@@ -36,11 +41,12 @@ export const createTask = async (req, res) => {
             status: "Incomplete",
             familyId: family._id, // Assign the task to all family members including the current user
             created_by: userId, // Assign the task to the current user
+            mentioned_user: mentionedUserIds,
         });
 
         // Update all family members to include the created task
         await User.updateMany(
-            { _id: { $in: familyMemberIds } },
+            { _id: { $in: [...new Set([...familyMemberIds, ...mentionedUserIds])] } },
             { $push: { tasks: task._id } }
         );
 
@@ -90,13 +96,21 @@ export const getTask = async (req, res) => {
             return res.status(400).json({ status: false, message: "Family not found" });
         }
 
+        //return family members username and id
+        const familyMembers = await User.find({ familyId: currentUser.familyId }).select("username");
+
         //retrieve all tasks assigned to the user and their family members
         const tasks = await Task.find({
             familyId: family._id
         })
-        .select("title datelines priority status description created_by")
+        .select("title datelines priority status description created_by mentioned_user familyId")
         .populate({
             path: "created_by",
+            select: "username",
+            model: User
+        })
+        .populate({
+            path: "mentioned_user",
             select: "username",
             model: User
         })
@@ -104,13 +118,19 @@ export const getTask = async (req, res) => {
             updatedAt: -1
         })
         
-
         //check if there are no tasks
         if (!tasks || tasks.length === 0){
             return res.status(404).json({status:false, message: "No task found"});
         }
 
-        res.status(200).json({status:true, tasks})
+
+        res.status(200).json({
+            status: true,
+            response: {
+                familyMembers,
+                tasks
+            }
+        });
 
     }
     catch (error){
@@ -277,6 +297,11 @@ export const getTaskID = async (req, res) => {
             .populate({
                 path: 'created_by',
                 select: 'username',
+            })
+            .populate({
+                path: "mentioned_user",
+                select: "username",
+                model: User
             })
             .populate({
                 path: 'familyId',
