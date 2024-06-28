@@ -41,7 +41,7 @@ const TaskCard = ({task}) => {
         {/* task title  */}
         <div className='flex items-center gap-2'>
             <div className={clsx("w-4 h-4 rounded-full", isComplete? TASK_AFTER[task?.status] : TASK_TYPE[task?.status])}/> 
-            <h4 className={clsx('line-clamp-1 cursor-pointer hover:underline', isComplete ? 'line-through text-gray-400 text-sm' : 'text-black font-bold')} onClick={openTaskDetails}>
+            <h4 className={clsx('line-clamp-1 cursor-pointer hover:underline ', isComplete ? 'line-through text-gray-400 text-sm hover:line-through' : 'text-black font-bold')} onClick={openTaskDetails}>
                 {task?.title}
             </h4>
         </div>

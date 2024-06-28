@@ -132,6 +132,7 @@ const AddBill = ({open, setOpen, bill, familyMembers = []}) => {
                             lists={CATEGORY} 
                             selected={category} 
                             setSelected={setCategory}
+                            isDisabled={Boolean(bill)}
                         />
                         </div>
                         {/* family members */}
@@ -178,6 +179,7 @@ const AddBill = ({open, setOpen, bill, familyMembers = []}) => {
                             lists={PRIORITY}
                             selected={priority}
                             setSelected={setPriority}
+                            isDisabled={Boolean(bill)}
                         />
                         </div>
                         

@@ -25,6 +25,7 @@ const statusref = {
 const animatedComponents = makeAnimated();
 
 const billSort = [
+  { value: 'My bill', label: 'My Bill' },
   { value: 'All', label: 'All' },
   { value: 'ClosestDatelines', label: 'Closest Datelines' },
   { value: 'HighPriority', label: 'High Priority' },
@@ -80,6 +81,11 @@ const Bill = () => {
 
     const criteriaValues = sortCriteria.map(criteria => criteria.value);
     // Filter based on multiple selected criteria
+    if (criteriaValues.includes('My bill')) {
+      // Filter bills where the logged-in user is mentioned
+      sortedBills = sortedBills.filter(bill => bill.mentioned_user.some(u => u._id === user._id));
+    }
+
     if (criteriaValues.includes('ClosestDatelines')) {
       sortedBills = sortedBills.filter(bill => bill.status === 'Unpaid');
       sortedBills.sort((a, b) => new Date(a.datelines) - new Date(b.datelines));

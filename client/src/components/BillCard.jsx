@@ -38,7 +38,7 @@ const BillCard = ({ bill }) => {
         
         <div className='flex items-center gap-2'>
           <div className={clsx('w-4 h-4 rounded-full', isPaid ? TASK_AFTER[bill.status] : TASK_TYPE[bill.status])} />
-          <h4 className={clsx('line-clamp-1 cursor-pointer hover:underline', isPaid ? 'line-through text-gray-400 text-sm' : 'text-black font-bold')} onClick={openBillDetails}>
+          <h4 className={clsx('line-clamp-1 cursor-pointer hover:underline', isPaid ? 'line-through text-gray-400 text-sm hover:line-through' : 'text-black font-bold')} onClick={openBillDetails}>
             {bill?.title}
           </h4>
         </div>

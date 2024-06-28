@@ -28,8 +28,8 @@ export const createBill = async (req, res) => {
             ? mentioned_user.filter(id => familyMemberIds.includes(id))
             : [];
 
-        const familyMembers = await User.find({ familyId: currentUser.familyId });
-        const familyMemberEmails = familyMembers.map(member => member.email);
+        const mentionedUser = await User.find({ _id: { $in: mentionedUserIds } });
+        const mentionedUserEmails = mentionedUser.map(member => member.email);
 
         //Create a single task for all family members
         const bill = await Bill.create({
@@ -59,8 +59,8 @@ export const createBill = async (req, res) => {
                 typeTitle: title,
                 typeDatelines: new Date(datelines).toDateString(),
                 FamilyId: family._id,
-                FamilyMembers: familyMemberIds,
-                FamilyEmails: familyMemberEmails,
+                FamilyMembers: mentionedUserIds,
+                FamilyEmails: mentionedUserEmails,
                 status: "Waiting",
                 sentAt: '',
                 successfulAt: '',
