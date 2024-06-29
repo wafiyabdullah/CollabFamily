@@ -36,7 +36,6 @@ const billSort = [
   { value: 'Insurance', label: 'Insurance' },
   { value: 'Transportation', label: 'Transportation' },
   { value: 'Subscriptions', label: 'Subscriptions' },
-  { value: 'Credit Cards', label: 'Credit Cards' },
   { value: 'Others', label: 'Others' },
 ];
 
@@ -100,7 +99,7 @@ const Bill = () => {
     }
 
     const categoryCriteria = criteriaValues.filter(value => 
-      ['Utilities', 'Loans', 'Rent', 'Insurance', 'Transportation', 'Subscriptions', 'Credit Cards', 'Others'].includes(value)
+      ['Utilities', 'Loans', 'Rent', 'Insurance', 'Transportation', 'Subscriptions', 'Others'].includes(value)
     );
 
     if (categoryCriteria.length > 0) {

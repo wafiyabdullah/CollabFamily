@@ -19,7 +19,7 @@ import { useCreateBillMutation, useUpdateBillMutation } from '../../redux/slices
 
 const LISTS = ["Unpaid","Paid" ]
 const PRIORITY = ["Low", "Medium", "High"]
-const CATEGORY = ["Utilities", "Loans", "Rent", "Insurance", "Transportation", "Subscriptions", "Credit Cards", "Others"]
+const CATEGORY = ["Utilities", "Loans", "Rent", "Insurance", "Transportation", "Subscriptions", "Others"]
 
 const animatedComponents = makeAnimated();
 

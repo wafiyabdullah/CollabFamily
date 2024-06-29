@@ -6,6 +6,7 @@ import BillDialog from '../components/bill/BillDialog'
 import { formatDate, getInitials } from '../utils'
 import { PRIORITY_STYLE, TASK_TYPE, PRIORITY_AFTER, TASK_AFTER, CATEGORY, CATEGORY_AFTER } from '../utils'
 
+
 const BillCard = ({ bill }) => {
   const { user } = useSelector((state) => state.auth)
   const [open, setOpen] = useState(false)
@@ -25,7 +26,7 @@ const BillCard = ({ bill }) => {
     <>
       <div className={clsx('w-full h-fit p-4 rounded', isPaid ? 'bg-[#F1EFF7]' : 'bg-white shadow-md')}>
         <div className='w-full flex mb-1 gap-2'>
-          <div className={clsx('flex items-center text-sm font-medium px-2 py-1 rounded-full', isPaid ? PRIORITY_AFTER[bill?.priority] : PRIORITY_STYLE[bill?.priority])}>
+          <div className={clsx('flex items-center text-sm font-medium px-2 py-1 rounded-full', isPaid ? PRIORITY_AFTER[bill?.priority] : PRIORITY_STYLE[bill?.priority] )}>
             <span className='capitalize font-bold'>{bill?.priority}</span>
           </div>
           <div className={clsx('flex items-center text-sm font-medium px-2 py-1 rounded-full', isPaid ? CATEGORY_AFTER[bill?.category] : CATEGORY[bill?.category])}>
