@@ -82,7 +82,7 @@ const AddUser = ({ open, setOpen, userData }) => {
               <Button
                 label={isLoading? (<Loading/>) : 'Submit'}
                 type='submit'
-                className='bg-violet-600 px-8 text-sm font-semibold text-white hover:bg-violet-700  sm:w-auto'
+                className='bg-blue-600 px-8 text-sm font-semibold text-white hover:bg-blue-700  sm:w-auto'
                 
               />
 

@@ -27,4 +27,5 @@ router.put("/change-password", protectRoute, changeUserPassword);
 
 router.delete("/remove-family-member", protectRoute, removeFamilyMember);
 
+
 export default router;

@@ -168,7 +168,7 @@ const AddTask = ({ open, setOpen, task, familyMembers = [] }) => {
               <Button
                 label={isLoading || isUpdating ? (<Loading />) : 'Submit'}
                 type='submit'
-                className='bg-violet-700 px-8 text-sm font-semibold text-white hover:bg-violet-600 sm:w-auto'
+                className='bg-blue-700 px-8 text-sm font-semibold text-white hover:bg-blue-600 sm:w-auto'
                 disabled={isLoading || isUpdating}
               />
               {/* cancel button */}

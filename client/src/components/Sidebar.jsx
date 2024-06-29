@@ -66,7 +66,7 @@ const Sidebar = () => {
         to={el.link}
         onClick={closeSidebar}
         className={clsx("w-full flex gap-2 px-8 py-3 items-center text-gray-800 text-base hover:bg-[#27334e2d] rounded-md", 
-        path === el.link.split("/")[0] ? "bg-violet-700 text-neutral-100 hover:bg-violet-800 " : ""
+        path === el.link.split("/")[0] ? "bg-blue-700 text-neutral-100 hover:bg-blue-800 " : ""
         )}
         >
           {el.icon}
@@ -79,7 +79,7 @@ const Sidebar = () => {
   return (
     <div className='w-full h-full flex flex-col gap-6 p-5'>
     <h1 className='flex gap-1 items-center'>
-      <p className='bg-violet-700 p-3 rounded-full'>
+      <p className='bg-blue-700 p-3 rounded-full'>
         <MdFamilyRestroom className='text-white text-2xl font-black'/>
       </p>
       <span className='text-2xl font-bold text-black'>CollabFamily</span>

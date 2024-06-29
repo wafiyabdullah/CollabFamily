@@ -59,7 +59,7 @@ const Profile = ({open, setOpen}) => {
                         Update Profile
                     </Dialog.Title>
                     <div className='flex justify-center items-center'>
-                        <div className='w-40 h-40 flex items-center justify-center rounded-full bg-violet-700'>
+                        <div className='w-40 h-40 flex items-center justify-center rounded-full bg-blue-700'>
                             <div className='text-center text-white 2xl:text-5xl'>{getInitials(user?.username)}</div>
                         </div>
                     </div>
@@ -103,7 +103,7 @@ const Profile = ({open, setOpen}) => {
                                 <Button
                                     label={isLoading ? (<Loading/>) : 'Save'}
                                     type='submit'
-                                    className='bg-violet-700 px-8 text-sm font-semibold text-white hover:bg-violet-600  sm:w-auto'
+                                    className='bg-blue-700 px-8 text-sm font-semibold text-white hover:bg-blue-600  sm:w-auto'
                                 />
                             </>
                         

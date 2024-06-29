@@ -115,40 +115,6 @@ export const logoutUser = async (req, res) => {
     }
 }
 
-export const getFamilyList = async (req, res) => { 
-    try{
-        const {userId} = req.user; // get user id from request
-        const currentUser = await User.findById(userId); // find user by id
-        
-        // Retrieve the family associated with the current user
-        const family = await Family.findOne({ familyId: currentUser.familyId })
-                                    .populate('familyMembers', '_id username role email');
-        
-        // Check if the family exists
-        if (!family) {
-            return res.status(404).json({ status: false, message: "Family not found" });
-        }
-
-        // Extract the family members from the family object
-        const familyMembers = family.familyMembers.filter(member => member._id.toString() !== userId);
-        
-        //Format the response with necessary fields
-        const response = familyMembers.map(user => ({
-            id : user._id,
-            username: user.username,
-            email: user.email,
-            role: user.role
-        }));
-
-        res.status(200).json(response); // send response
-    }
-    catch (error) {
-        return res
-            .status(400)
-            .json({ status: false, message: error.message });
-    }
-}
-
 export const updateUserProfile = async (req, res) => { 
     try{
         // code to update user profile
@@ -354,5 +320,68 @@ export const removeFamilyMember = async (req, res) => {
         return res
             .status(400)
             .json({ status: false, message: error.message });
+    }
+}
+
+export const getFamilyList = async (req, res) => { 
+    try {
+        const { userId } = req.user; // get user id from request
+        const currentUser = await User.findById(userId); // find user by id
+        
+        // Retrieve the family associated with the current user
+        const family = await Family.findOne({ familyId: currentUser.familyId })
+                                   .populate('familyMembers', '_id username role email');
+        
+        // Check if the family exists
+        if (!family) {
+            return res.status(404).json({ status: false, message: "Family not found" });
+        }
+
+        // Extract the family members from the family object
+        const familyMembers = family.familyMembers.filter(member => member._id.toString() !== userId);
+
+        // Fetch tasks and bills for the family
+        const tasks = await Task.find({familyId: family._id});
+        const bills = await Bill.find({familyId: family._id});
+
+        //console.log("Tasks fetched:", tasks);
+        //console.log("Bills fetched:", bills);
+
+        // Format the response with necessary fields and additional counts
+        const response = familyMembers.map(user => {
+            const userIdStr = user._id.toString();
+            const userTasks = tasks.filter(task => task.mentioned_user.some(u => u.toString() === userIdStr));
+            const userBills = bills.filter(bill => bill.mentioned_user.some(u => u.toString() === userIdStr));
+
+            //console.log(`User: ${user.username}, User Tasks:`, userTasks);
+            //console.log(`User: ${user.username}, User Bills:`, userBills);
+
+            const incompleteTasks = userTasks.filter(task => task.status === 'Incomplete').length;
+            const completedTasks = userTasks.filter(task => task.status === 'Complete').length;
+
+            const unpaidBills = userBills.filter(bill => bill.status === 'Unpaid').length;
+            const paidBills = userBills.filter(bill => bill.status === 'Paid').length;
+
+            //console.log(`User: ${user.username}, Incomplete Tasks: ${incompleteTasks}, Completed Tasks: ${completedTasks}`);
+            //console.log(`User: ${user.username}, Unpaid Bills: ${unpaidBills}, Paid Bills: ${paidBills}`);
+
+            return {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                role: user.role,
+                taskCount: userTasks.length,
+                billCount: userBills.length,
+                incompleteTaskCount: incompleteTasks,
+                completeTaskCount: completedTasks,
+                unpaidBillCount: unpaidBills,
+                paidBillCount: paidBills
+            };
+        });
+
+        res.status(200).json({ status: true, response }); // send response
+    } catch (error) {
+        console.error("Error:", error);
+        return res.status(400).json({ status: false, message: error.message });
     }
 }

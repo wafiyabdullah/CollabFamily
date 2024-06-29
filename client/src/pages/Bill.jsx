@@ -137,7 +137,7 @@ const Bill = () => {
           onClick={() => setOpen(true)}
           label="Create Bill"
           icon={<IoMdAdd className="text-lg" />}
-          className="flex flex-row-reverse gap-1 items-center bg-violet-700 text-white rounded-md py-2 2xl:py-2.5 hover:bg-violet-800"
+          className="flex flex-row-reverse gap-1 items-center bg-blue-700 text-white rounded-md py-2 2xl:py-2.5 hover:bg-blue-800"
         />
       </div>
       <div className='w-full flex items-center py-4 gap-3'>

@@ -85,7 +85,7 @@ const ChangePassword = ({open, setOpen}) => {
                             <Button
                                 label={isLoading ? (<Loading/>) : 'Save'}
                                 type='submit'
-                                className='bg-violet-700 px-8 text-sm font-semibold text-white hover:bg-violet-600  sm:w-auto'
+                                className='bg-blue-700 px-8 text-sm font-semibold text-white hover:bg-blue-600  sm:w-auto'
                             />
                             {/*cancel button  */}
                             <Button

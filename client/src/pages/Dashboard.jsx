@@ -9,9 +9,12 @@ import { useGetDashboardQuery } from '../redux/slices/api/dashboardApiSlice';
 import { TbCalendarDue } from "react-icons/tb";
 import { RiBillLine } from "react-icons/ri";
 import { BsListTask } from "react-icons/bs";
+import { GoGraph } from "react-icons/go";
 
+import ChartBill from "../components/ChartBill";
 import Chart from "../components/Chart";
 import Loading from "../components/Loader";
+import Button from "../components/Button";
 
 {/* ------------------------------------------------------------------------------TASK AREA (LEFT SIDE)--------------------------------------------------------------------------------- */}
 // TaskTable component
@@ -72,6 +75,8 @@ const TaskTable = ({tasks}) => {
 const Dashboard = () => {
 
   const user = useSelector((state) => state.auth.user) //get user from redux store
+  const [open, setOpen] = useState(false) //modal state
+  const [openBill, setOpenBill] = useState(false) //modal state
   const [isLoading, setIsLoading] = useState(true) //loading state
   const navigate = useNavigate();
   const {data, refetch} = useGetDashboardQuery() //fetch data from api
@@ -113,41 +118,46 @@ const Dashboard = () => {
   {/* ---------------------------------------------------------------LOGIC API END--------------------------------------------------------------------------------- */}
   const tasks = data?.response ? data.response.recentActivity : [];
   const totalPriority = data?.response ? data.response.totalPriority : [];
+  const billPerMonth = data?.response ? data.response.totalBillsByMonth : [];
 
   //console.log(totalPriority);
-  const HeaderData = data?.response ? [ //array of objects
+  const HeaderData = data?.response ? [
     {
       _id: "1",
       label: "COMPLETE TASK",
       total: data.response.totalTaskCount,
       icon: <BsListTask />,
-      bg: "bg-[#1d4ed8]",
+      bg: "bg-emerald-700", // Green shade
+      iconbg : "bg-emerald-600"
     },
     {
       _id: "2",
       label: "INCOMPLETE TASK",
       total: data.response.totalDueTaskCount,
       icon: <TbCalendarDue />,
-      bg: "bg-[#0f766e]",
+      bg: "bg-cyan-700", // Yellow shade
+      iconbg : "bg-cyan-600"
     },
     {
       _id: "3",
       label: "OUTSTANDING AMOUNT",
-      total: "RM "+data.response.totalBillCount,
+      total: "RM " + data.response.totalBillCount,
       icon: <RiBillLine />,
-      bg: "bg-[#f59e0b]",
+      bg: "bg-indigo-800", // Blue shade
+      iconbg : "bg-indigo-600"
     },
     {
       _id: "4",
       label: "UNPAID BILL",
       total: data.response.totalDueBillCount,
       icon: <TbCalendarDue />,
-      bg: "bg-[#be185d]" || 0,
+      bg: "bg-fuchsia-800", // Red shade
+      iconbg : "bg-fuchsia-600"
     },
   ] : [];
 
   // Card component
-  const Card = ({label, count, bg, icon}) => {
+  const Card = ({label, count, bg, icon, iconbg}) => {
     return (
       <div className={clsx('w-full h-32  p-5 shadow-md rounded-md flex items-center justify-between', bg)}>
         <div className='h-full flex flex-1 flex-col justify-between'>
@@ -155,8 +165,8 @@ const Dashboard = () => {
           <span className='text-2xl font-light text-white'>{count}</span>
           <span className='text-sm text-gray-400'></span>
         </div>
-      {/* Icon  */} {/*clsx is used to combine classes*/}
-      <div className="w-10 h-10 rounded-full flex items-center justify-center text-white bg-slate-400">
+      {/* Icon  */} 
+      <div className={clsx("w-10 h-10 rounded-full flex items-center justify-center text-white", iconbg)}>
         {icon}
       </div>
 
@@ -174,36 +184,45 @@ const Dashboard = () => {
       {/* top card */}
       {/* passing props of object to Card component */}
       <div className='grid grid-cols-1 md:grid-cols-4 gap-5'>
-        {HeaderData.map(({icon, bg, label, total}, index) => (
-          <Card key={index} icon={icon} bg={bg} label={label} count={total} /> //passing props to Card component
+        {HeaderData.map(({icon, bg, label, total, iconbg}, index) => (
+          <Card key={index} icon={icon} bg={bg} label={label} count={total} iconbg={iconbg}/> //passing props to Card component
         ))}
       </div>
-      
-      <div className='w-full flex flex-col md:flex-row gap-2 2xl:gap-2'>
+      <div className='flex my-4'>
+        <Button 
+          onClick={() => setOpenBill(true)}
+          label="Bill per Month" 
+          icon={<GoGraph className="text-lg"/>} 
+          className="flex flex-row-reverse gap-1 justify-center items-center bg-blue-700 text-white rounded-md py-2 2xl:py-2.5 hover:bg-blue-800"
+        />
+      </div>
+      <div className='w-full gap-2 2xl:gap-2 '>
       {/* task priority Chart */}
-        <div className='md:w-full bg-white my-10 p-4 rounded shadow-sm border border-gray-200'>
+        <div className='md:w-full bg-white my-4 p-4 rounded shadow-sm border border-gray-200'>
           <div className=''>
+            
               <h4 className='text-xl text-gray-600 font-bold pb-4'>
                 Priority Bar Chart
               </h4>
             <Chart data = {totalPriority}/> 
           </div>  
-        </div>
+        </div> 
+
       </div>
 
       {/*Task */}    
-      <div className='w-3/4 flex flex-col md:flex-row gap-4 2xl:gap-10'>
+      <div className='w-full flex flex-col md:flex-row gap-4 2xl:gap-10'>
           {/*left side*/}
            <TaskTable tasks = {tasks}/>
 
           {/*right side*/}
-        {/*  <UserTable users={summary.users}/> */}
+        {/*  bill by month */}
 
       </div>
 
       </>
      )}
-
+    <ChartBill data = {billPerMonth} open={openBill} setOpen={setOpenBill}/>
     </div>
   )
 

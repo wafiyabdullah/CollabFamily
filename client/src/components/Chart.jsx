@@ -10,14 +10,19 @@ import {
     YAxis,
     CartesianGrid,
   } from "recharts";
+import ModalWrapper from './ModalWrapper';
+import { Dialog } from '@headlessui/react';
+import { IoMdClose } from "react-icons/io";
   
 const Chart = ({data}) => {
   
     return (
-    <ResponsiveContainer  //ResponsiveContainer is a wrapper component for recharts
+
+      
+        <ResponsiveContainer  //ResponsiveContainer is a wrapper component for recharts
         width={"95%"} //width and height are set to 100% so that the chart can take the full width and height of its container
         height={400}
-    >
+        >
         <BarChart //BarChart is a chart component for recharts
             width={100} 
             height={40}
@@ -35,11 +40,13 @@ const Chart = ({data}) => {
             <Tooltip /> {/*for hovering chart*/}
             <Legend /> {/*chart legend(reference)*/}
              {/*grid of chart <CartesianGrid strokeDasharray="3 3" /> */} 
-            <Bar dataKey="task" fill="#8884d8" activeBar={<Rectangle fill="pink" stroke="blue" />}/>  
-            <Bar dataKey="bill" fill="#82ca9d" activeBar={<Rectangle fill="gold" stroke="purple" />}/> 
+            <Bar dataKey="task" fill="#8884d8" activeBar={<Rectangle fill="#8884d8" stroke="blue" />}/>  
+            <Bar dataKey="bill" fill="#82ca9d" activeBar={<Rectangle fill="#82ca9d" stroke="purple" />}/> 
         </BarChart>
 
-    </ResponsiveContainer>
+        </ResponsiveContainer>
+      
+    
   )
 }
 
