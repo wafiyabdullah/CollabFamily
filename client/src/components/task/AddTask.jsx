@@ -159,7 +159,6 @@ const AddTask = ({ open, setOpen, task, familyMembers = [] }) => {
                 lists={PRIORITY}
                 selected={priority}
                 setSelected={setPriority}
-                isDisabled={Boolean(task)}
               />
             </div>
             

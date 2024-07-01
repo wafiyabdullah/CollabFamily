@@ -179,7 +179,6 @@ const AddBill = ({open, setOpen, bill, familyMembers = []}) => {
                             lists={PRIORITY}
                             selected={priority}
                             setSelected={setPriority}
-                            isDisabled={Boolean(bill)}
                         />
                         </div>
                         
