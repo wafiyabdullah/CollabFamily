@@ -35,7 +35,7 @@ const linkData = [
     icon: <FaUsers />,
   },
   {
-    label: "Admin Home",
+    label: "Admin Dashboard",
     link: "admin",
     icon: <MdFamilyRestroom />,
   },
@@ -51,8 +51,8 @@ const Sidebar = () => {
 
   //const sidebarLinks = linkData; //sidebar links to linkData
   const sidebarLinks = user?.role === 'admin'
-    ? linkData.filter(link => link.label === "Admin Home")
-    : linkData.filter(link => link.label !== "Admin Home");
+    ? linkData.filter(link => link.label === "Admin Dashboard")
+    : linkData.filter(link => link.label !== "Admin Dashboard");
 
   const closeSidebar = () => { //close sidebar
     dispatch(setOpenSidebar(false));

@@ -119,15 +119,13 @@ export const updateUserProfile = async (req, res) => {
     try{
         // code to update user profile
         const {userId} = req.user; // get user id from request
-        const {username, email, role} = req.body;
+        const {username} = req.body;
 
         const user = await User.findById(userId); // find user by id
 
         if(user){
             // Update username, email, and role if provided in the request body
             user.username = username || user.username; // update username
-            user.email = email || user.email; // update email
-            user.role = role || user.role; // update role
 
             const updatedUser = await user.save(); // save user
 

@@ -73,7 +73,6 @@ const Profile = ({open, setOpen}) => {
                             className='w-full rounded'
                             register={register('username', {required: 'Username is required'})}
                             error={errors.username ? errors.username.message : ''}
-                            disable
                         />
                         {/*email  */}
                         <Textbox
@@ -84,6 +83,7 @@ const Profile = ({open, setOpen}) => {
                             className='w-full rounded'
                             register={register('email', {required: 'Email is required'})}
                             error={errors.email ? errors.email.message : ''}
+
                         />
                         {/*role  */}
                         <Textbox
