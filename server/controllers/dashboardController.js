@@ -186,6 +186,39 @@ export const getDashboard = async (req, res) => {
     // Sort combined recent activity by createdAt field in descending order
     combinedRecentActivity.sort((a, b) => b.createdAt - a.createdAt);
 
+
+    //get all low,medium and high priority tasks that datelines is one day before
+    const dueTasks = await Task.find({
+      familyId: family._id,
+      status: "Incomplete",
+      datelines: { $lte: new Date(new Date().setDate(new Date().getDate() + 1)) }
+      
+    })
+    //retrieve all mentioned users username
+    .populate({
+      path: 'mentioned_user',
+      select: 'username',
+      model: 'User',
+    })
+    .exec();
+
+    //get all low,medium and high priority bills that datelines is one day before
+    const dueBills = await Bill.find({
+      familyId: family._id,
+      status: "Unpaid",
+      datelines: { $lte: new Date(new Date().setDate(new Date().getDate() + 1)) }
+    })
+    //retrieve all mentioned users username
+    .populate({
+      path: 'mentioned_user',
+      select: 'username',
+      model: 'User',
+    })
+    .exec();
+
+    //combine the due tasks and bills and sort by priority
+    const combinedDueTasksAndBills = [...dueTasks, ...dueBills].sort((a, b) => a.priority.localeCompare(b.priority));
+
     // Response
     const response = {
       totalTaskCount,
@@ -195,6 +228,7 @@ export const getDashboard = async (req, res) => {
       totalPriority,
       totalBillsByMonth: billsPerMonthFormatted,
       recentActivity: combinedRecentActivity,
+      NotiTasksAndBills: combinedDueTasksAndBills,
     };
 
     // Send response

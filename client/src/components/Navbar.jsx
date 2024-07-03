@@ -3,12 +3,10 @@ import { setOpenSidebar } from '../redux/slices/authSlice'
 
 import { useDispatch, useSelector } from 'react-redux'
 import UserAvatar from '../components/UserAvatar'
-import { MdOutlineSearch } from "react-icons/md";
 
 const Navbar = () => {
     const {user} = useSelector((state) => state.auth); //useSelector to get user from redux for auth
     const dispatch = useDispatch(); //useDispatch to dispatch actions
-
 
   return (
     <div className='flex justify-between items-center bg-white px-4 py-3 2xl:py-2 sticky z-10 top-0'>
@@ -23,9 +21,9 @@ const Navbar = () => {
         </div>*/}
         </div>
 
-        <div className='flex gap-2 items-center'>
-            {/* <NotificationPanel /> {/*notification panel*/} 
-            {user?.username}
+        <div className='flex gap-5 items-center'>
+            {/*<NotificationPanel /> */}
+           
             <UserAvatar /> {/*user avatar*/}
             
         </div>

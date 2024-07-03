@@ -15,6 +15,7 @@ import ChartBill from "../components/ChartBill";
 import Chart from "../components/Chart";
 import Loading from "../components/Loader";
 import Button from "../components/Button";
+import Notification from "../components/Notification";
 
 {/* ------------------------------------------------------------------------------TASK AREA (LEFT SIDE)--------------------------------------------------------------------------------- */}
 // TaskTable component
@@ -58,6 +59,9 @@ const TaskTable = ({tasks}) => {
   return (
     <>
       <div className='w-full bg-white px-2 md:px-4 pt-4 pb-4 shadow-md rounded'>
+      <div className='w-fit justify-center items-center '>
+            <h3 className='font-semibold text-lg rounded-full bg-slate-100 px-2 py-1'>Recent Activities</h3>
+        </div>
         <table className="w-full">
           <TableHeader />
             <tbody>
@@ -70,6 +74,9 @@ const TaskTable = ({tasks}) => {
     </>
   )
 }
+{/* ------------------------------------------------------------------------------Notification AREA (RIGHT SIDE)--------------------------------------------------------------------------------- */}
+
+
 
 {/* ------------------------------------------------------------------------------DASHBOARD AREA--------------------------------------------------------------------------------- */}
 const Dashboard = () => {
@@ -119,7 +126,7 @@ const Dashboard = () => {
   const tasks = data?.response ? data.response.recentActivity : [];
   const totalPriority = data?.response ? data.response.totalPriority : [];
   const billPerMonth = data?.response ? data.response.totalBillsByMonth : [];
-
+  const DueNoti = data?.response ? data.response.NotiTasksAndBills : [];
   //console.log(totalPriority);
   const HeaderData = data?.response ? [
     {
@@ -211,12 +218,12 @@ const Dashboard = () => {
       </div>
 
       {/*Task */}    
-      <div className='w-full flex flex-col md:flex-row gap-4 2xl:gap-10'>
+      <div className='w-full flex flex-col md:flex-row gap-2 2xl:gap-4'>
           {/*left side*/}
            <TaskTable tasks = {tasks}/>
 
           {/*right side*/}
-        {/*  bill by month */}
+          <Notification DueNoti = {DueNoti}/>
 
       </div>
 
