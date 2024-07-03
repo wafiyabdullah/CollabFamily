@@ -239,6 +239,35 @@ export const updateTask = async (req, res) => {
             { new: true } // This option returns the updated document
         )
 
+        //if user update the task from low or medium to high priority and task is incomplete, create a notification email
+        if (task.priority !== "High" && priority === "High" && task.status === "Incomplete"){
+
+            const mentionedUser = await User.find({ _id: { $in: task.mentioned_user } });
+            const mentionedUserEmails = mentionedUser.map(member => member.email);
+
+            const NotiTask = await Notification.create({
+                type: "Task",
+                typeId: task._id,
+                typeTitle: title,
+                typeDatelines: new Date(datelines).toDateString(),
+                FamilyId: task.familyId,
+                FamilyMembers: task.mentioned_user,
+                FamilyEmails: mentionedUserEmails,
+                status: "Waiting",
+                sentAt: '',
+                successfulAt: '',
+            })
+        }
+
+        //if user update the task from high to low or medium priority and task is incomplete, update the notification status to 'Canceled'
+        if (task.priority === "High" && (priority !== "High" && task.status === "Incomplete")){
+            await Notification.findOneAndUpdate(
+                { typeId: task._id, type: 'Task' },
+                { status: 'Canceled' },
+                { new: true } // This option returns the updated document
+            );
+        }
+
         res.status(200).json({status:true, message: "Task updated successfully"})
     }
     catch (error){

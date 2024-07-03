@@ -226,6 +226,35 @@ export const updateBill = async (req, res) => {
             { new: true }
         )
 
+         //if user update the bill from low or medium to high priority and bill is Unpaid, create a notification email
+         if (bill.priority !== "High" && priority === "High" && bill.status === "Unpaid"){
+
+            const mentionedUser = await User.find({ _id: { $in: bill.mentioned_user } });
+            const mentionedUserEmails = mentionedUser.map(member => member.email);
+
+            const NotiBill = await Notification.create({
+                type: "Bill",
+                typeId: bill._id,
+                typeTitle: title,
+                typeDatelines: new Date(datelines).toDateString(),
+                FamilyId: bill.familyId,
+                FamilyMembers: bill.mentioned_user,
+                FamilyEmails: mentionedUserEmails,
+                status: "Waiting",
+                sentAt: '',
+                successfulAt: '',
+            })
+        }
+
+        //if user update the bill from high to low or medium priority and bill is Unpaid, update the notification status to 'canceled'
+        if (bill.priority === "High" && priority !== "High" && bill.status === "Unpaid") {
+            await Notification.findOneAndUpdate(
+                { typeId: bill._id, type: 'Bill' },
+                { status: 'Canceled' },
+                { new: true }
+            );
+        }
+
         res.status(200).json({status:true, message: "Bill updated successfully"})
     }
     catch (error){
