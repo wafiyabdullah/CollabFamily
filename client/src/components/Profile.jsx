@@ -80,10 +80,10 @@ const Profile = ({open, setOpen}) => {
                             type='email'
                             name='email'
                             label='Email'
-                            className='w-full rounded'
+                            className='w-full rounded cursor-not-allowed'
                             register={register('email', {required: 'Email is required'})}
                             error={errors.email ? errors.email.message : ''}
-
+                            disabled={true}
                         />
                         {/*role  */}
                         <Textbox
@@ -91,9 +91,10 @@ const Profile = ({open, setOpen}) => {
                             type='text'
                             name='role'
                             label='Role'
-                            className='w-full rounded'
+                            className='w-full rounded cursor-not-allowed'
                             register={register('role', {required: 'Role is required'})}
                             error={errors.role ? errors.role.message : ''}
+                            disabled={true}
                         />
                     </div>
                     

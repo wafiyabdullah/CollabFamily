@@ -134,7 +134,7 @@ export const updateUserProfile = async (req, res) => {
 
             res.status(201).json({
                 status: true,
-                message: "Profile updated successfully",
+                message: "Profile update, they may not reflect immediately",
                 user: updatedUser,
             })
         }else{
