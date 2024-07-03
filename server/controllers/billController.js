@@ -240,8 +240,6 @@ export const billPaid = async (req, res) => {
         const {userId} = req.user;
         const { status } = req.body;
 
-        // Retrieve the current user's family members
-        const currentUser = await User.findById(userId).populate('familyId');
 
         // find the bill by id
         const bill = await Bill.findById(id);
@@ -249,9 +247,10 @@ export const billPaid = async (req, res) => {
             return res.status(404).json({status:false, message: "Bill not found"})
         }
 
-        // check if the bill exist or not created by the user and his family members
-        if (bill.created_by.toString() !== userId && (currentUser.familyId)){
-            return res.status(403).json({status:false, message: "Unauthorized to complete this task"});
+        // Check if the current user is in the mentioned users list
+        const isMentionedUser = bill.mentioned_user.some(user => user.toString() === userId);
+        if (!isMentionedUser) {
+            return res.status(403).json({ status: false, message: 'Only assigned member can paid this bill' });
         }
 
         // update the bill status

@@ -49,7 +49,7 @@ function App() {
         <Route path='/login' element={<Login />} />
       </Routes>
 
-      <Toaster position="top-center" richColors closeButton expand={true}/>
+      <Toaster position="bottom-right" richColors  expand={false}/>
     </main>
   )
 }
