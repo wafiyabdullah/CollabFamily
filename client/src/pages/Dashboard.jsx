@@ -230,9 +230,11 @@ const Dashboard = () => {
       </>
      )}
     <ChartBill data = {billPerMonth} open={openBill} setOpen={setOpenBill}/>
+    
     </div>
   )
 
+  
 }
 
 export default Dashboard
