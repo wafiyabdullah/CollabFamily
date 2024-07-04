@@ -150,6 +150,10 @@ const Task = () => {
           <div className='py-10'>
             <Loading />
           </div>
+        ) : filteredTasks.length === 0 ? (
+          <div className='py-10 text-center text-gray-500'>
+            There are no tasks. Create a task to get started!
+          </div>
         ) : (
           <div className='w-full py-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 2xl:gap-4'>
             {filteredTasks.map((task, index) => (

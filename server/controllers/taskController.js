@@ -121,9 +121,14 @@ export const getTask = async (req, res) => {
         
         //check if there are no tasks
         if (!tasks || tasks.length === 0){
-            return res.status(404).json({status:false, message: "No task found"});
+            return res.status(200).json({
+                status:true, 
+                message: "No task found",
+                response: {
+                    familyMembers,
+                }
+            });
         }
-
 
         res.status(200).json({
             status: true,

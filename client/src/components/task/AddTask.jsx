@@ -50,7 +50,7 @@ const AddTask = ({ open, setOpen, task, familyMembers = [] }) => {
   }, [open, task, reset]);
 
   useEffect(() => {
-    setSelectedOptions(task?.mentioned_user.map(user => ({ value: user._id, label: user.username })) || []);
+    setSelectedOptions(task?.mentioned_user.map(user => ({ value: user._id, label: user.username })) || [] );
   }, [task]);
 
   const submitHandler = async (data) => {
@@ -120,7 +120,7 @@ const AddTask = ({ open, setOpen, task, familyMembers = [] }) => {
               </label>
               <Select
                 options={familyMemberOptions}
-                closeMenuOnSelect={false}
+                closeMenuOnSelect={true}
                 components={animatedComponents}
                 placeholder='Assign Family Members'
                 value={selectedOptions}

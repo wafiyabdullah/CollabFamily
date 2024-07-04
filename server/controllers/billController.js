@@ -120,7 +120,13 @@ export const getBill = async (req, res) => {
 
         // Check if there are no bills found
         if (!bills || bills.length === 0) {
-            return res.status(404).json({ status: false, message: "No bills found" });
+            return res.status(200).json({ 
+                status: true,
+                message: "No bills found",
+                response: {
+                    familyMembers,
+                }
+            });
         }
 
         res.status(200).json({

@@ -142,7 +142,7 @@ const AddBill = ({open, setOpen, bill, familyMembers = []}) => {
                         </label>
                         <Select
                             options={familyMemberOptions}
-                            closeMenuOnSelect={false}
+                            closeMenuOnSelect={true}
                             components={animatedComponents}
                             placeholder='Assign Family Members'
                             value={selectedOptions}
