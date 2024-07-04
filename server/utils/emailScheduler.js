@@ -2,9 +2,7 @@ import cron from 'node-cron';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 import Notification from '../models/notification.js';
-import Family from '../models/family.js';
-import Task from '../models/task.js';
-import Bill from '../models/bill.js';
+import moment from 'moment';
 
 dotenv.config();
 
@@ -16,9 +14,28 @@ var transporter = nodemailer.createTransport({
     }
 })
 
+const getRelativeTime = (deadline) => {
+    const today = moment().startOf('day'); // Start of today, ignoring time
+    const dueDate = moment(deadline).startOf('day'); // Start of deadline date, ignoring time
+    const diffDays = dueDate.diff(today, 'days');
+  
+    if (diffDays === 1) {
+      return 'Tomorrow';
+    } else if (diffDays === 0) {
+      return 'Today';
+    } else if (diffDays === -1) {
+      return 'Yesterday';
+    } else if (diffDays < 0) {
+      return `${Math.abs(diffDays)} days late`;
+    } else {
+      return `${diffDays} days left`;
+    }
+  };
+
 async function scheduleEmail() {
+
     // Schedule email to be sent at 11:00 AM everyday
-    cron.schedule('02 11 * * *', async function() { 
+    cron.schedule('37 17 * * *', async function() { 
         
         try{
 
@@ -41,8 +58,8 @@ async function scheduleEmail() {
                 const mailOptions = {
                     from: process.env.EMAIL_USER,
                     to: emailList,
-                    subject: `Your ${notification.type} is due tomorrow!`,
-                    text: `You have a ${notification.type} : ${notification.typeTitle}\n\nDue Date: ${notification.typeDatelines}`
+                    subject: `Your ${notification.type} is due ${getRelativeTime(notification.typeDatelines)}!`,
+                    text: `You have a ${notification.type} : ${notification.typeTitle}\n\nDue Date: ${moment(notification.typeDatelines).format('MMMM Do YYYY')}`
                 }
 
                 transporter.sendMail(mailOptions, async function(error, info){
