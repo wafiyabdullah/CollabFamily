@@ -73,10 +73,10 @@ const Login = () => {
         {/* left side of login page*/}
         <div className='w-full md:w-2/3 flex flex-col items-center justify-center'>
           <div className='w-full md:max-w-lg 2xl:max-w-3xl flex flex-col items-center justify-center gap-5 md:gap-y-10 2xl:-mt-20'>
-            <span className='cursor-default flex gap-1 py-1 px-3 border rounded-full text-sm md:text-base border-violet-300 text-gray-600'>
+            <span className='cursor-default flex gap-1 py-1 px-3 border rounded-full text-sm md:text-base border-blue-300 text-gray-600'>
               Collaborative!
               </span>
-              <p className='cursor-default flex flex-col gap-0 md:gap-4 font-extrabold text-4xl md:text-6xl 2xl:text-7xl text-center bg-clip-text text-transparent bg-gradient-to-r from-violet-500 to-violet-900'>
+              <p className='cursor-default flex flex-col gap-0 md:gap-4 font-extrabold text-4xl md:text-6xl 2xl:text-7xl text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-blue-900'>
                 <span>Family Management</span>
                 <span>System</span>
               </p>
@@ -94,7 +94,7 @@ const Login = () => {
           className='form-container w-full md:w-[400px] flex flex-col gap-y-8 bg-white px-10 pt-14 pb-14'
           >
             <div className=''>
-              <p className='cursor-default text-violet-700 text-3xl font-bold text-center'>
+              <p className='cursor-default text-blue-700 text-3xl font-bold text-center'>
                 welcome back!
               </p>
               <p className='cursor-default text-center text-base text-gray-400'>
@@ -133,10 +133,10 @@ const Login = () => {
             <Button 
               label={isLoginLoading ? (<Loading/>) : 'login'}
               type='submit'
-              className='w-full h-10 bg-violet-700 text-white hover:bg-violet-800'
+              className='w-full h-10 bg-blue-700 text-white hover:bg-blue-800'
             />
             <span className='cursor-default text-sm text-gray-500'>New to this?
-              <span className='text-sm text-gray-500 hover:text-violet-600 hover:underline cursor-pointer' onClick={() => setIsRegisterMode(true) }> Register now</span>
+              <span className='text-sm text-gray-500 hover:text-blue-600 hover:underline cursor-pointer' onClick={() => setIsRegisterMode(true) }> Register now</span>
             </span>
               <div className='cursor-default w-full text-center '>
                 <p className='text-sm text-gray-400'>&copy; {new Date().getFullYear()} CollabFamily . version 1.0</p>
@@ -148,7 +148,7 @@ const Login = () => {
             className='form-container w-full md:w-[500px] flex flex-col gap-y-8 bg-white px-10 pt-14 pb-14'
             >
               <div className=''>
-                <p className='cursor-default text-violet-700 text-3xl font-bold text-center'>
+                <p className='cursor-default text-blue-700 text-3xl font-bold text-center'>
                   Welcome!
                 </p>
                 <p className='cursor-default text-center text-base text-gray-400'>
@@ -206,10 +206,10 @@ const Login = () => {
                 <Button 
                   label={isRegisterLoading ? (<Loading/>) : 'register'}
                   type='submit'
-                  className='w-full h-10 bg-violet-700 text-white hover:bg-violet-800'
+                  className='w-full h-10 bg-blue-700 text-white hover:bg-blue-800'
                 />
                 <span className='cursor-default text-sm text-gray-500'>Already have an account?
-                  <span className='text-sm text-gray-500 hover:text-violet-600 hover:underline cursor-pointer' onClick={() => setIsRegisterMode(false) }> Login now</span>
+                  <span className='text-sm text-gray-500 hover:text-blue-600 hover:underline cursor-pointer' onClick={() => setIsRegisterMode(false) }> Login now</span>
                 </span>
                 <div className='cursor-default  w-full text-center '>
                   <p className='text-sm text-gray-400'>&copy; {new Date().getFullYear()} CollabFamily . version 1.0</p>
