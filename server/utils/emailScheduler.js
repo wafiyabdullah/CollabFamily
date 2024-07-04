@@ -35,7 +35,7 @@ const getRelativeTime = (deadline) => {
 async function scheduleEmail() {
 
     // Schedule email to be sent at 11:00 AM everyday
-    cron.schedule('37 17 * * *', async function() { 
+    cron.schedule('35 17 * * *', async function() { 
         
         try{
 
