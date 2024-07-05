@@ -25,7 +25,7 @@ app.use(express.static('dist'));
 
 app.use(
   cors({
-    origin: ["https://family-management-system.netlify.app", "http://localhost:3000"],
+    origin: ["http://localhost:3000"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
