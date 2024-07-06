@@ -20,11 +20,11 @@ const getRelativeTime = (deadline) => {
     const diffDays = dueDate.diff(today, 'days');
   
     if (diffDays === 1) {
-      return 'Tomorrow';
+      return 'due Tomorrow';
     } else if (diffDays === 0) {
-      return 'Today';
+      return 'due Today';
     } else if (diffDays === -1) {
-      return 'Yesterday';
+      return 'due Yesterday';
     } else if (diffDays < 0) {
       return `${Math.abs(diffDays)} days late`;
     } else {
@@ -35,8 +35,8 @@ const getRelativeTime = (deadline) => {
 async function scheduleEmail() {
 
     // Schedule email to be sent at 11:00 AM everyday
-    cron.schedule('37 22 * * *', async function() { 
-        
+    cron.schedule('09 23 * * *', async function() { 
+       
         try{
 
             // return notification with status except Complete and datelines tomorrow
@@ -58,7 +58,7 @@ async function scheduleEmail() {
                 const mailOptions = {
                     from: process.env.EMAIL_USER,
                     to: emailList,
-                    subject: `Your ${notification.type} is due ${getRelativeTime(notification.typeDatelines)}!`,
+                    subject: `CollabFamily: Your ${notification.type} is ${getRelativeTime(notification.typeDatelines)}!`,
                     html: `
                         <p>You have a ${notification.type} : ${notification.typeTitle}</p>
                         <p>Due Date: ${moment(notification.typeDatelines).format('MMMM Do YYYY')}</p>
