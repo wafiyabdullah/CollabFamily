@@ -2,6 +2,19 @@ import Task from '../models/task.js';
 import User from '../models/user.js';
 import Family from "../models/family.js";
 import Notification from '../models/notification.js';
+import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+import moment from 'moment';
+
+dotenv.config();
+
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+})
 
 export const createTask = async (req, res) => {
     try{
@@ -65,6 +78,25 @@ export const createTask = async (req, res) => {
                 status: "Waiting",
                 sentAt: '',
                 successfulAt: '',
+            })
+        }
+
+        if (task !== null && task.status === "Incomplete"){
+            const emailList = mentionedUserEmails.join(',');
+
+            const mailOptions = {
+                from: process.env.EMAIL_USER,
+                to: emailList,
+                subject: `You have a new ${priority} priority task`,
+                text: `You have a new ${priority} priority task: ${title}\n\nDue Date: ${moment(new Date(datelines)).format('MMMM Do YYYY')}`
+            }
+
+            transporter.sendMail(mailOptions, async function(error, info){
+                if (error){
+                    console.log('Error Sending Email', error);
+                } else {
+                    console.log('Email sent:', info.response);
+                }
             })
         }
 
