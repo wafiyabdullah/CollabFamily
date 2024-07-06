@@ -2,6 +2,19 @@ import Bill from '../models/bill.js';
 import User from '../models/user.js';
 import Family from "../models/family.js";
 import Notification from '../models/notification.js';
+import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+import moment from 'moment';
+
+dotenv.config();
+
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+})
 
 export const createBill = async (req, res) => { 
     try{
@@ -67,8 +80,36 @@ export const createBill = async (req, res) => {
             })
         }
 
-        res.status(200).json({status:true, message: "Bill created", bill})
+        //get username of created user
+        const createdUser = await User.findById(userId).select("username");
 
+        //send email to mentioned users
+        if (bill !== null && bill.status === "Unpaid"){
+            const emailList = mentionedUserEmails.join(',');
+        
+            const mailOptions = {
+                from: process.env.EMAIL_USER,
+                to: emailList,
+                subject: `CollabFamily: You have a new ${priority} priority bill`,
+                html: `
+                    <p>You have a new bill from ${createdUser.username}</p>
+                    <p>Title: ${title}</p>
+                    <p>Amount: ${amount}</p>
+                    <p>Due Date: ${moment(datelines).format('MMMM Do YYYY')}</p>
+                    <p><a href="https://collabfamily.onrender.com" style="display: inline-block; padding: 5px 10px; font-size: 16px; color: white; background-color: #007BFF; text-align: center; text-decoration: none; border-radius: 5px;">Open CollabFamily</a></p>
+                `
+            };
+        
+            transporter.sendMail(mailOptions, async function(error, info){
+                if (error){
+                    console.log('Error Sending Email', error);
+                } else {
+                    console.log('Email sent:', info.response);
+                }
+            });
+        }
+
+        res.status(200).json({status:true, message: "Bill created", bill})
     }
     catch (error){
         console.log(error)
