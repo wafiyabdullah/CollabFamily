@@ -17,7 +17,7 @@ const Notification = ({ DueNoti }) => {
       <tr className='text-black text-left'>
         <th className='py-2 w-21 h-8 '>Title</th>
         <th className='w-21 h-8 '>Priority</th>
-        <th className='w-21 h-8 '>Datelines</th>
+        <th className='w-21 h-8 '>Deadlines</th>
         <th className='w-21 h-8 '>Family Member</th>
       </tr>
     </thead>

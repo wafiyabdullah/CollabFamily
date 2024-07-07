@@ -164,10 +164,10 @@ const AddBill = ({open, setOpen, bill, familyMembers = []}) => {
                         placeholder='Date'
                         type='date'
                         name='datelines'
-                        label='Datelines'
+                        label='Deadlines'
                         className='w-full rounded'
                         register={register("datelines", {
-                            required: "Datelines is required!",
+                            required: "Deadlines is required!",
                         })}
                         error={errors.datelines ? errors.datelines.message : ""}
                         />

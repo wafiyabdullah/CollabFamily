@@ -27,7 +27,7 @@ const animatedComponents = makeAnimated();
 const billSort = [
   { value: 'My bill', label: 'My Bill' },
   { value: 'All', label: 'All' },
-  { value: 'ClosestDatelines', label: 'Closest Datelines' },
+  { value: 'ClosestDatelines', label: 'Closest Deadlines' },
   { value: 'HighPriority', label: 'High Priority' },
   { value: 'Unpaid', label: 'Unpaid' },
   { value: 'Utilities', label: 'Utilities' },

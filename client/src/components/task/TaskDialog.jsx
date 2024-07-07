@@ -120,7 +120,7 @@ const TaskDialog = ({task}) => {
                         onClick={el.disabled ? null : el?.onClick}
                         className={`${
                             el.disabled ? "cursor-not-allowed  text-gray-400" :
-                            active ? "bg-violet-700 text-white" : "text-gray-900"
+                            active ? "bg-blue-700 text-white" : "text-gray-900"
                         } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                       >
                         {el.icon}
@@ -137,7 +137,7 @@ const TaskDialog = ({task}) => {
                     <button
                       onClick={() => deleteClicks()}
                       className={`${
-                        active ? "bg-violet-700 text-white" : "text-red-900"
+                        active ? "bg-blue-700 text-white" : "text-red-900"
                       } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                     >
                       <RiDeleteBin6Line

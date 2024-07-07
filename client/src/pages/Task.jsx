@@ -27,7 +27,7 @@ const animatedComponents = makeAnimated();
 
 const taskSort = [
   { value: 'My task', label: 'My Task' },
-  { value: 'ClosestDatelines', label: 'Closest Datelines' },
+  { value: 'ClosestDatelines', label: 'Closest Deadlines' },
   { value: 'HighPriority', label: 'High Priority' },
   { value: 'Incomplete', label: 'Incomplete' },
 ]

@@ -76,7 +76,7 @@ const TaskDetails = () => {
 
           <div className='w-full flex items-center gap-8 p-2 border-y border-gray-200 md:gap'>
             <div className='space-x-2'>
-              <span className='font-bold'>Datelines:</span>
+              <span className='font-bold'>Deadlines:</span>
               <span className={clsx('font-semibold', typedate[task?.status])}>
                 {new Date(task?.datelines).toDateString()}
               </span>
