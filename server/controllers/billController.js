@@ -95,7 +95,7 @@ export const createBill = async (req, res) => {
                     <p>You have a new bill from ${createdUser.username}</p>
                     <p>Title: ${title}</p>
                     <p>Amount: ${amount}</p>
-                    <p>Due Date: ${moment(datelines).format('MMMM Do YYYY')}</p>
+                    <p>Deadlines: ${moment(datelines).format('MMMM Do YYYY')}</p>
                     <p><a href="https://collabfamily.onrender.com" style="display: inline-block; padding: 5px 10px; font-size: 16px; color: white; background-color: #007BFF; text-align: center; text-decoration: none; border-radius: 5px;">Open CollabFamily</a></p>
                 `
             };

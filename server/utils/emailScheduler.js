@@ -61,7 +61,7 @@ async function scheduleEmail() {
                     subject: `CollabFamily: Your ${notification.type} is ${getRelativeTime(notification.typeDatelines)}!`,
                     html: `
                         <p>You have a ${notification.type} : ${notification.typeTitle}</p>
-                        <p>Due Date: ${moment(notification.typeDatelines).format('MMMM Do YYYY')}</p>
+                        <p>Deadlines: ${moment(notification.typeDatelines).format('MMMM Do YYYY')}</p>
                         <p><a href="https://collabfamily.onrender.com" style="display: inline-block; padding: 5px 10px; font-size: 16px; color: white; background-color: #007BFF; text-align: center; text-decoration: none; border-radius: 5px;">Open CollabFamily</a></p>
                     `
                     //text: `You have a ${notification.type} : ${notification.typeTitle}\n\nDue Date: ${moment(notification.typeDatelines).format('MMMM Do YYYY')}`
