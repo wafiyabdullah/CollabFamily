@@ -92,9 +92,9 @@ export const createTask = async (req, res) => {
                 to: emailList,
                 subject: `CollabFamily: You have a new ${priority} priority task`,
                 html: `
-                    <p>You have a new task from ${createdUser.username}</p>
-                    <p>Title: ${title}</p>
-                    <p>Deadlines: ${moment(datelines).format('MMMM Do YYYY')}</p>
+                    <p>You have a new task from <strong>${createdUser.username}</strong></p>
+                    <p>Title: <strong>${title}</strong></p>
+                    <p>Deadlines: <strong>${moment(datelines).format('MMMM Do YYYY')}</strong></p>
                     <p><a href="https://collabfamily.onrender.com" style="display: inline-block; padding: 5px 10px; font-size: 16px; color: white; background-color: #007BFF; text-align: center; text-decoration: none; border-radius: 5px;">Open CollabFamily</a></p>
                 `
             }
@@ -352,8 +352,35 @@ export const taskComplete = async (req, res) => {
             { new: true } // This option returns the updated document
         );
 
-        res.status(200).json({status:true, message: "Task completed"})
+        //sent email to the creator of the task and mentioned user
+        const creator = await User.findById(task.created_by._id).select('email username');
+        const mentionedUsers = await User.find({ '_id': { $in: task.mentioned_user } }).select('email username');
 
+        const allUsers = [creator, ...mentionedUsers];
+        const emailList = allUsers.map(user => user.email).join(',');
+
+        // Send email to the creator of the task and mentioned users
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: emailList,
+            subject: `CollabFamily: Task - ${task.title} Completed`,
+            html: `
+                <p>The task titled <strong>${task.title}</strong> has been marked as <strong>complete</strong>.</p>
+                <p>Completed by: <strong>${creator.username}</strong></p>
+                <p>Completion Date: <strong>${moment().format('MMMM Do YYYY, h:mm:ss a')}</strong></p>
+                <p><a href="https://collabfamily.onrender.com" style="display: inline-block; padding: 5px 10px; font-size: 16px; color: white; background-color: #007BFF; text-align: center; text-decoration: none; border-radius: 5px;">Open CollabFamily</a></p>
+            `
+        };
+
+        transporter.sendMail(mailOptions, async function (error, info) {
+            if (error) {
+                console.log('Error Sending Email', error);
+            } else {
+                console.log('Email sent:', info.response);
+            }
+        });
+
+        res.status(200).json({status:true, message: "Task completed"})
     }
     catch (error){
         console.log(error)

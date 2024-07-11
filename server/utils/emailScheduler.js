@@ -35,7 +35,7 @@ const getRelativeTime = (deadline) => {
 async function scheduleEmail() {
 
     // Schedule email to be sent at 11:00 AM everyday
-    cron.schedule('22 21 * * *', async function() { 
+    cron.schedule('13 23 * * *', async function() { 
        
         try{
 
@@ -55,17 +55,28 @@ async function scheduleEmail() {
                     continue;
                 }
 
+                // Determine subject prefix and style based on the deadline
+                let subjectPrefix = 'Reminder';
+                let emoji = '⏰';
+                let alertStyle = '';
+
+                const relativeTime = getRelativeTime(notification.typeDatelines);
+                if (relativeTime.includes('late')) {
+                    subjectPrefix = 'Alert';
+                    emoji = '⚠️';
+                    alertStyle = 'color: red; font-weight: bold;';
+                }
+
                 const mailOptions = {
                     from: process.env.EMAIL_USER,
                     to: emailList,
-                    subject: `CollabFamily: Your ${notification.type} is ${getRelativeTime(notification.typeDatelines)}!`,
+                    subject: `${emoji} CollabFamily: ${subjectPrefix} - Your ${notification.type} is ${relativeTime}!`,
                     html: `
-                        <p>You have a ${notification.type} : ${notification.typeTitle}</p>
-                        <p>Deadlines: ${moment(notification.typeDatelines).format('MMMM Do YYYY')}</p>
+                        <p style="${alertStyle}">You have a ${notification.type} : <strong>${notification.typeTitle}</strong></p>
+                        <p>Deadlines: <strong>${moment(notification.typeDatelines).format('MMMM Do YYYY')}</strong></p>
                         <p><a href="https://collabfamily.onrender.com" style="display: inline-block; padding: 5px 10px; font-size: 16px; color: white; background-color: #007BFF; text-align: center; text-decoration: none; border-radius: 5px;">Open CollabFamily</a></p>
                     `
-                    //text: `You have a ${notification.type} : ${notification.typeTitle}\n\nDue Date: ${moment(notification.typeDatelines).format('MMMM Do YYYY')}`
-                }
+                };
 
                 transporter.sendMail(mailOptions, async function(error, info){
                     if (error){
