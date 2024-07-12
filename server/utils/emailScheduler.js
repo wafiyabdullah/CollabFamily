@@ -32,11 +32,8 @@ const getRelativeTime = (deadline) => {
     }
   };
 
-async function scheduleEmail() {
+async function sendScheduledEmails() {
 
-    // Schedule email to be sent at 11:00 AM everyday
-    cron.schedule('13 23 * * *', async function() { 
-       
         try{
 
             // return notification with status except Complete and datelines tomorrow
@@ -96,7 +93,17 @@ async function scheduleEmail() {
         } catch (err) {
             console.error('Error in sending email: ', err);
         }
+}
 
+async function scheduleEmail() {
+    // Schedule email to be sent at 8:00 AM everyday
+    cron.schedule('0 8 * * *', async function() {
+        await sendScheduledEmails();
+    });
+
+    // Schedule email to be sent at 5:00 PM everyday
+    cron.schedule('0 17 * * *', async function() {
+        await sendScheduledEmails();
     });
 }
 

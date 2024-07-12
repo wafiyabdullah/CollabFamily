@@ -16,6 +16,19 @@ var transporter = nodemailer.createTransport({
     }
 })
 
+const getPriorityEmoji = (priority) => {
+    switch (priority) {
+        case "Low":
+            return "🟢";
+        case "Medium":
+            return "🟠";
+        case "High":
+            return "🔴";
+        default:
+            return "";
+    }
+};
+
 export const createBill = async (req, res) => { 
     try{
         const { title, amount, datelines, priority, mentioned_user, category} = req.body;
@@ -90,7 +103,7 @@ export const createBill = async (req, res) => {
             const mailOptions = {
                 from: process.env.EMAIL_USER,
                 to: emailList,
-                subject: `CollabFamily: You have a new ${priority} priority bill`,
+                subject: `CollabFamily: You have a new ${getPriorityEmoji(priority)}${priority} priority bill`,
                 html: `
                     <p>You have a new bill from <strong>${createdUser.username}</strong></p>
                     <p>Title: <strong>${title}</strong></p>
@@ -99,7 +112,7 @@ export const createBill = async (req, res) => {
                     <p><a href="https://collabfamily.onrender.com" style="display: inline-block; padding: 5px 10px; font-size: 16px; color: white; background-color: #007BFF; text-align: center; text-decoration: none; border-radius: 5px;">Open CollabFamily</a></p>
                 `
             };
-        
+            
             transporter.sendMail(mailOptions, async function(error, info){
                 if (error){
                     console.log('Error Sending Email', error);
@@ -352,7 +365,7 @@ export const billPaid = async (req, res) => {
         const mailOptions = {
             from: process.env.EMAIL_USER,
             to: emailList,
-            subject: `CollabFamily: Bill - ${bill.title} Paid`,
+            subject: `✅ CollabFamily: Bill - ${bill.title} Paid`,
             html: `
                 <p>The bill titled <strong>${bill.title}</strong> has been marked as <strong>paid</strong>.</p>
                 <p>Completed by: <strong>${creator.username}</strong></p>

@@ -16,6 +16,19 @@ var transporter = nodemailer.createTransport({
     }
 })
 
+const getPriorityEmoji = (priority) => {
+    switch (priority) {
+        case "Low":
+            return "🟢";
+        case "Medium":
+            return "🟠";
+        case "High":
+            return "🔴";
+        default:
+            return "";
+    }
+};
+
 export const createTask = async (req, res) => {
     try{
         const { title, datelines, priority, description, mentioned_user} = req.body;
@@ -90,7 +103,7 @@ export const createTask = async (req, res) => {
             const mailOptions = {
                 from: process.env.EMAIL_USER,
                 to: emailList,
-                subject: `CollabFamily: You have a new ${priority} priority task`,
+                subject: `CollabFamily: You have a new ${getPriorityEmoji(priority)}${priority} priority task`,
                 html: `
                     <p>You have a new task from <strong>${createdUser.username}</strong></p>
                     <p>Title: <strong>${title}</strong></p>
@@ -363,7 +376,7 @@ export const taskComplete = async (req, res) => {
         const mailOptions = {
             from: process.env.EMAIL_USER,
             to: emailList,
-            subject: `CollabFamily: Task - ${task.title} Completed`,
+            subject: `✅ CollabFamily: Task - ${task.title} Completed`,
             html: `
                 <p>The task titled <strong>${task.title}</strong> has been marked as <strong>complete</strong>.</p>
                 <p>Completed by: <strong>${creator.username}</strong></p>
