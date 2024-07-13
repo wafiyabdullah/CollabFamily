@@ -17,8 +17,12 @@ const TaskCard = ({task}) => {
     const isComplete = task?.status === 'Complete';
     const isUserMentioned = task?.mentioned_user?.some(mentionedUser => mentionedUser._id === user?._id);
     const isCreatedByMe = task?.created_by._id === user?._id;
+
+    const currentDate = new Date();
+    const taskDeadline = new Date(task?.datelines);
+    const isLate = currentDate > taskDeadline && task?.status !== 'Complete';
     
-    console.log(isCreatedByMe);
+    //console.log(isCreatedByMe);
     //console.log('Task Status:', task?.status);
     //console.log('Is Complete:', isComplete);
     const openTaskDetails = () => { 
@@ -30,16 +34,24 @@ const TaskCard = ({task}) => {
         <div className={clsx('w-full h-fit p-4 rounded', isComplete ? 'bg-[#F1EFF7]' : 'bg-white shadow-md')}> 
       
         <div className='w-full flex justify-between mb-1'>
-            {/* priority icon */}
-            <div className={clsx("flex gap-1 items-center text-sm font-medium px-2 py-1 rounded-full", isComplete ? PRIORITY_AFTER[task?.priority] : PRIORITY_STYLE[task?.priority])}>
-                {/*<span className='text-lg'>{ICONS[task?.priority]}</span>*/}
-                <span className='capitalize font-bold'>{task?.priority}</span>
-                
-            </div>
-            
-            {/* task dialog */}
-            <TaskDialog task={task} />
-        </div>
+                    {/* Wrapper for priority icon and late badge */}
+                    <div className='flex items-center gap-2'>
+                        {/* priority icon */}
+                        <div className={clsx("flex gap-1 items-center text-sm font-medium px-2 py-1 rounded-full", isComplete ? PRIORITY_AFTER[task?.priority] : PRIORITY_STYLE[task?.priority])}>
+                            {/*<span className='text-lg'>{ICONS[task?.priority]}</span>*/}
+                            <span className='capitalize font-bold'>{task?.priority}</span>
+                        </div>
+                        {/* Late badge */}
+                        {isLate && (
+                            <div className='flex gap-1 items-center text-sm font-medium px-2 py-1 rounded-full bg-red-500 text-white'>
+                                <span className='capitalize font-bold'>Late</span>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* task dialog */}
+                    <TaskDialog task={task} />
+                </div>
 
         <>
         {/* task title  */}

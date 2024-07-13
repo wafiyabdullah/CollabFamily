@@ -157,7 +157,7 @@ export const getBill = async (req, res) => {
        const bills = await Bill.find({
             familyId: family._id
         })
-            .select("title amount datelines priority status mentioned_user familyId created_by category")
+            .select("title amount datelines priority status mentioned_user familyId created_by category updatedAt createdAt")
             .populate({
                 path: "created_by",
                 select: "username",

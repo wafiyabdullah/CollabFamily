@@ -16,6 +16,10 @@ const BillCard = ({ bill }) => {
   const isUserMentioned = bill?.mentioned_user?.some(mentionedUser => mentionedUser._id === user?._id)
   const isCreatedByMe = bill?.created_by._id === user?._id;
 
+  const currentDate = new Date();
+  const billDeadline = new Date(bill?.datelines);
+  const isLate = currentDate > billDeadline && bill?.status !== 'Paid';
+
   const openBillDetails = () => {
     navigate(`/bill/${bill._id}`)
   }
@@ -26,13 +30,22 @@ const BillCard = ({ bill }) => {
   return (
     <>
       <div className={clsx('w-full h-fit p-4 rounded', isPaid ? 'bg-[#F1EFF7]' : 'bg-white shadow-md')}>
-        <div className='w-full flex mb-1 gap-2'>
-          <div className={clsx('flex items-center text-sm font-medium px-2 py-1 rounded-full', isPaid ? PRIORITY_AFTER[bill?.priority] : PRIORITY_STYLE[bill?.priority] )}>
-            <span className='capitalize font-bold'>{bill?.priority}</span>
+        <div className='w-full flex justify-between mb-1'>
+          <div className='flex items-center gap-2'>
+            <div className={clsx('flex items-center text-sm font-medium px-2 py-1 rounded-full', isPaid ? PRIORITY_AFTER[bill?.priority] : PRIORITY_STYLE[bill?.priority] )}>
+              <span className='capitalize font-bold'>{bill?.priority}</span>
+            </div>
+            <div className={clsx('flex items-center text-sm font-medium px-2 py-1 rounded-full', isPaid ? CATEGORY_AFTER[bill?.category] : CATEGORY[bill?.category])}>
+              <span className='capitalize font-bold'>{bill?.category}</span>
+            </div>
+            {/* Late badge */}
+            {isLate && (
+              <div className='flex gap-1 items-center text-sm font-medium px-2 py-1 rounded-full bg-red-500 text-white'>
+              <span className='capitalize font-bold'>Late</span>
+              </div>
+              )}
           </div>
-          <div className={clsx('flex items-center text-sm font-medium px-2 py-1 rounded-full', isPaid ? CATEGORY_AFTER[bill?.category] : CATEGORY[bill?.category])}>
-            <span className='capitalize font-bold'>{bill?.category}</span>
-          </div>
+          
           <div className='ml-auto'>
             <BillDialog bill={bill} />
           </div>

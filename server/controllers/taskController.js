@@ -157,7 +157,7 @@ export const getTask = async (req, res) => {
         const tasks = await Task.find({
             familyId: family._id
         })
-        .select("title datelines priority status description created_by mentioned_user familyId")
+        .select("title datelines priority status description created_by mentioned_user familyId updatedAt createdAt")
         .populate({
             path: "created_by",
             select: "username",
