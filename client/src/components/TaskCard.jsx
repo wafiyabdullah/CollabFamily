@@ -16,7 +16,9 @@ const TaskCard = ({task}) => {
 
     const isComplete = task?.status === 'Complete';
     const isUserMentioned = task?.mentioned_user?.some(mentionedUser => mentionedUser._id === user?._id);
+    const isCreatedByMe = task?.created_by._id === user?._id;
     
+    console.log(isCreatedByMe);
     //console.log('Task Status:', task?.status);
     //console.log('Is Complete:', isComplete);
     const openTaskDetails = () => { 
@@ -32,7 +34,9 @@ const TaskCard = ({task}) => {
             <div className={clsx("flex gap-1 items-center text-sm font-medium px-2 py-1 rounded-full", isComplete ? PRIORITY_AFTER[task?.priority] : PRIORITY_STYLE[task?.priority])}>
                 {/*<span className='text-lg'>{ICONS[task?.priority]}</span>*/}
                 <span className='capitalize font-bold'>{task?.priority}</span>
+                
             </div>
+            
             {/* task dialog */}
             <TaskDialog task={task} />
         </div>
@@ -59,6 +63,7 @@ const TaskCard = ({task}) => {
                     <span className={clsx('text-sm font-medium', isComplete ? 'text-gray-400 line-through' : 'text-gray-600')}>
                         Due: <span className={clsx(isComplete? '' : 'underline' )}>{formatDate(new Date(task?.datelines))}</span>
                     </span>
+                    
                 </div>
                 {/* right side*/}
                 {isUserMentioned && (
@@ -72,9 +77,18 @@ const TaskCard = ({task}) => {
                 </div>
                 )}
                 
-
+                
             </div>
+            {isCreatedByMe && (
+                    <div className='flex items-center justify-center'>
+                    <div className={clsx('text-sm', isComplete ? 'text-gray-400 line-through' : 'text-gray-600')}>
+                        Created by you
+                    </div>
+                    </div>
+                )}
+            
         </div>
+       
 
     </div> {/* close 1 */}
     

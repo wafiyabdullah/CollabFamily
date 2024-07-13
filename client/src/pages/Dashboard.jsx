@@ -10,70 +10,86 @@ import { TbCalendarDue } from "react-icons/tb";
 import { RiBillLine } from "react-icons/ri";
 import { BsListTask } from "react-icons/bs";
 import { GoGraph } from "react-icons/go";
+import { FaCalendarAlt } from "react-icons/fa";
 
 import ChartBill from "../components/ChartBill";
 import Chart from "../components/Chart";
 import Loading from "../components/Loader";
 import Button from "../components/Button";
 import Notification from "../components/Notification";
+import CalendarView from "../components/CalendarView";
 
 {/* ------------------------------------------------------------------------------TASK AREA (LEFT SIDE)--------------------------------------------------------------------------------- */}
 // TaskTable component
-const TaskTable = ({tasks}) => {
-  
+const TaskTable = ({ tasks }) => {
+  const [expanded, setExpanded] = useState(false);
+
+  // Show only 6 tasks initially, or all if expanded is true
+  const displayedTasks = expanded ? tasks : tasks.slice(0, 6);
+
   // TableHeader component
   const TableHeader = () => (
-    <thead className="border-b border-gray-300 ">
+    <thead className="border-b border-gray-300">
       <tr className='text-black text-left'>
         <th className='py-2'>Activities</th>
         <th className='py-2'>Created By</th>
-        <th className='py-2 '>Created At</th>
+        <th className='py-2'>Created At</th>
       </tr>
     </thead>
-  )
+  );
 
-  // each TableRow component
-  const TableRow = ({task}) => 
+  // TableRow component
+  const TableRow = ({ task }) => (
     <tr className='border-b border-gray-200 text-gray-600 hover:bg-gray-300/10'>
-      {/*activities */}
-        <td className=''>
-          <div className='items-center'>
-            <p className='text-base text-black'>{task.title}</p>
-          </div>
-        </td>
-        {/*created by */}
-         <td className=''> 
-          <div className=''>
-              {task.created_by.username}
-          </div>
-        </td> 
-      {/*created at */}
-        <td className='py-2 hidden md:block'>
-            <span className='text-base text-gray-600'>
-              {moment(task?.createdAt).fromNow()}
-            </span>
-        </td>
-    </tr>;
+      <td className=''>
+        <div className='items-center'>
+          <p className='text-base text-black'>{task.title}</p>
+        </div>
+      </td>
+      <td className=''>
+        <div className=''>
+          {task.created_by.username}
+        </div>
+      </td>
+      <td className='py-2 hidden md:block'>
+        <span className='text-base text-gray-600'>
+          {moment(task?.createdAt).fromNow()}
+        </span>
+      </td>
+    </tr>
+  );
 
   // TaskTable component
   return (
     <>
       <div className='w-full bg-white px-2 md:px-4 pt-4 pb-4 shadow-md rounded'>
-      <div className='w-fit justify-center items-center '>
-            <h3 className='font-semibold text-lg rounded-full bg-slate-100 px-2 py-1'>Recent Activities</h3>
+        <div className='w-fit justify-center items-center'>
+          <h3 className='font-semibold text-lg rounded-full bg-slate-100 px-2 py-1'>Recent Activities</h3>
         </div>
         <table className="w-full">
           <TableHeader />
-            <tbody>
-              {tasks?.map((task, id) => (
-                  <TableRow key={id} task={task} />
-                ))}
-            </tbody>
+          <tbody>
+            {displayedTasks.map((task, id) => (
+              <TableRow key={id} task={task} />
+            ))}
+          </tbody>
         </table>
+        {/* Show expand button if there are more than 6 tasks */}
+        {!expanded && tasks.length > 6 && (
+          <div className="mt-4">
+            <button
+              className="text-blue-600 hover:underline"
+              onClick={() => setExpanded(true)}
+            >
+              Show More
+            </button>
+          </div>
+        )}
       </div>
     </>
-  )
-}
+  );
+};
+
 {/* ------------------------------------------------------------------------------Notification AREA (RIGHT SIDE)--------------------------------------------------------------------------------- */}
 
 
@@ -84,6 +100,7 @@ const Dashboard = () => {
   const user = useSelector((state) => state.auth.user) //get user from redux store
   const [open, setOpen] = useState(false) //modal state
   const [openBill, setOpenBill] = useState(false) //modal state
+  const [openCalendar, setOpenCalendar] = useState(false) 
   const [isLoading, setIsLoading] = useState(true) //loading state
   const navigate = useNavigate();
   const {data, refetch} = useGetDashboardQuery() //fetch data from api
@@ -127,6 +144,8 @@ const Dashboard = () => {
   const totalPriority = data?.response ? data.response.totalPriority : [];
   const billPerMonth = data?.response ? data.response.totalBillsByMonth : [];
   const DueNoti = data?.response ? data.response.NotiTasksAndBills : [];
+
+  const currentMonth = moment().format('MMMM');
   //console.log(totalPriority);
   const HeaderData = data?.response ? [
     {
@@ -170,7 +189,7 @@ const Dashboard = () => {
         <div className='h-full flex flex-1 flex-col justify-between'>
           <p className='text-base text-white font-bold'>{label}</p>
           <span className='text-2xl font-light text-white'>{count}</span>
-          <span className='text-sm text-gray-400'></span>
+          <span className='text-md text-gray-300'>{currentMonth}</span> {/* Display current month */}
         </div>
       {/* Icon  */} 
       <div className={clsx("w-10 h-10 rounded-full flex items-center justify-center text-white", iconbg)}>
@@ -195,10 +214,16 @@ const Dashboard = () => {
           <Card key={index} icon={icon} bg={bg} label={label} count={total} iconbg={iconbg}/> //passing props to Card component
         ))}
       </div>
-      <div className='flex my-4'>
+      <div className='flex my-4 gap-2'>
+        <Button 
+          onClick={() => setOpenCalendar(true)}
+          label="Calendar View"
+          icon={<FaCalendarAlt className="text-lg"/>}
+          className="flex flex-row-reverse gap-1 justify-center items-center bg-blue-700 text-white rounded-md py-2 2xl:py-2.5 hover:bg-blue-800"
+        />
         <Button 
           onClick={() => setOpenBill(true)}
-          label="Bill per Month" 
+          label="Monthly Bill" 
           icon={<GoGraph className="text-lg"/>} 
           className="flex flex-row-reverse gap-1 justify-center items-center bg-blue-700 text-white rounded-md py-2 2xl:py-2.5 hover:bg-blue-800"
         />
@@ -209,7 +234,7 @@ const Dashboard = () => {
           <div className=''>
             
               <h4 className='text-xl text-gray-600 font-bold pb-4'>
-                Priority Bar Chart
+              <span className='text-md '>{currentMonth} Priority Chart</span> 
               </h4>
             <Chart data = {totalPriority}/> 
           </div>  
@@ -230,7 +255,7 @@ const Dashboard = () => {
       </>
      )}
     <ChartBill data = {billPerMonth} open={openBill} setOpen={setOpenBill}/>
-    
+    <CalendarView tasks={tasks} open={openCalendar} setOpen={setOpenCalendar}/>
     </div>
   )
 

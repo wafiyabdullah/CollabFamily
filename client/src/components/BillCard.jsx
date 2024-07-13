@@ -14,6 +14,7 @@ const BillCard = ({ bill }) => {
 
   const isPaid = bill?.status === 'Paid'
   const isUserMentioned = bill?.mentioned_user?.some(mentionedUser => mentionedUser._id === user?._id)
+  const isCreatedByMe = bill?.created_by._id === user?._id;
 
   const openBillDetails = () => {
     navigate(`/bill/${bill._id}`)
@@ -62,7 +63,15 @@ const BillCard = ({ bill }) => {
               </div>
             </div>
           )}
+          
         </div>
+        {isCreatedByMe && (
+              <div className='flex items-center justify-center'>
+              <div className={clsx('text-sm', isPaid ? 'text-gray-400 line-through' : 'text-gray-600')}>
+                  Created by you
+              </div>
+              </div>
+          )}
       </div>
     </>
   )

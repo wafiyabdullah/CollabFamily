@@ -3,124 +3,154 @@ import User from '../models/user.js';
 import Bill from '../models/bill.js';
 import Family from "../models/family.js";
 
-// Function to get the month name
-const getMonthName = (index) => {
-  const monthNames = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-  ];
-  return monthNames[index];
-}
-
 export const getDashboard = async (req, res) => {
   try {
     const { userId } = req.user; // get user id from request
-
-    // find user by id and their family members
     const currentUser = await User.findById(userId);
 
-    // Check if user is admin
     if (currentUser.role === 'admin') {
       return res.status(403).json({ status: false, message: "Admins do not have access to the dashboard." });
     }
 
-    // Ensure the user belongs to a family
     if (!currentUser.familyId) {
       return res.status(400).json({ status: false, message: "User does not belong to a family" });
     }
 
-    // Retrieve the family document to get the family ID
     const family = await Family.findOne({ familyId: currentUser.familyId });
 
-    // Check if the family document exists
     if (!family) {
       return res.status(400).json({ status: false, message: "Family not found" });
     }
 
-    // Collect family member IDs including the current user
     const userAndFamilyIds = [userId, ...family.familyMembers];
 
-    // Total complete task count
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+
+    const startOfMonth = new Date(currentYear, currentMonth, 1);
+    const endOfMonth = new Date(currentYear, currentMonth + 1, 0);
+
+    // Total complete task count for current month
     const totalTaskCount = await Task.countDocuments({
       familyId: family._id,
       status: "Complete",
+      datelines: { $gte: startOfMonth, $lte: endOfMonth }
     });
 
-    // Total due task count
+    // Total incomplete task count for current month
     const totalDueTaskCount = await Task.countDocuments({
       familyId: family._id,
       status: "Incomplete",
+      datelines: { $gte: startOfMonth, $lte: endOfMonth }
     });
 
-    // Total of outstanding bill amount
-    const totalBillCount = await Bill.aggregate([
-      {
-        $match: {
-          familyId: family._id,
-          status: "Unpaid"
-        }
-      },
-      {
-        $group: {
-          _id: null,
-          totalAmount: { $sum: "$amount" }
-        }
-      }
-    ]);
-
-    // Total due bill count
-    const totalDueBillCount = await Bill.countDocuments({
+    // Total outstanding bill amount for current month
+    const unpaidBills = await Bill.find({
       familyId: family._id,
       status: "Unpaid",
+      datelines: { $gte: startOfMonth, $lte: endOfMonth }
     });
 
-    // Total priority task count
-    const totalHighPriorityTaskCount = await Task.countDocuments({
+    const totalDueBillCount = unpaidBills.length;
+    const totalBillCount = unpaidBills.reduce((total, bill) => total + bill.amount, 0);
+
+    // Total priority task count for current month
+    const highPriorityTasks = await Task.countDocuments({
       familyId: family._id,
       priority: "High",
+      datelines: { $gte: startOfMonth, $lte: endOfMonth }
     });
-    const totalMediumPriorityTaskCount = await Task.countDocuments({
+
+    const mediumPriorityTasks = await Task.countDocuments({
       familyId: family._id,
-      priority: "Medium"
+      priority: "Medium",
+      datelines: { $gte: startOfMonth, $lte: endOfMonth }
     });
-    const totalLowPriorityTaskCount = await Task.countDocuments({
+
+    const lowPriorityTasks = await Task.countDocuments({
       familyId: family._id,
-      priority: "Low"
+      priority: "Low",
+      datelines: { $gte: startOfMonth, $lte: endOfMonth }
     });
-    // Total priority bill count
-    const totalHighPriorityBillCount = await Bill.countDocuments({
-      familyId: family._id,
-      priority: "High",
-    });
-    const totalMediumPriorityBillCount = await Bill.countDocuments({
-      familyId: family._id,
-      priority: "Medium"
-    });
-    const totalLowPriorityBillCount = await Bill.countDocuments({
-      familyId: family._id,
-      priority: "Low"
-    });
+
+    // Total priority bill count for current month
+    const highPriorityBills = unpaidBills.filter(bill => bill.priority === "High").length;
+    const mediumPriorityBills = unpaidBills.filter(bill => bill.priority === "Medium").length;
+    const lowPriorityBills = unpaidBills.filter(bill => bill.priority === "Low").length;
 
     const totalPriority = [
       {
         name: "High",
-        task: totalHighPriorityTaskCount,
-        bill: totalHighPriorityBillCount,
+        task: highPriorityTasks,
+        bill: highPriorityBills,
       },
       {
         name: "Medium",
-        task: totalMediumPriorityTaskCount,
-        bill: totalMediumPriorityBillCount,
+        task: mediumPriorityTasks,
+        bill: mediumPriorityBills,
       },
       {
         name: "Low",
-        task: totalLowPriorityTaskCount,
-        bill: totalLowPriorityBillCount,
+        task: lowPriorityTasks,
+        bill: lowPriorityBills,
       }
     ];
 
-    // Total bills for each month of the current year based on due datelines
-    const currentYear = new Date().getFullYear();
+    // Recent activity for task and bill in one group limit 5
+    const recentActivity = await Promise.all([
+      Task.find({ familyId: family._id})
+        .sort({ createdAt: -1 })
+        .populate({
+          path: 'created_by',
+          select: 'username',
+          model: 'User'
+        }),
+
+      Bill.find({ familyId: family._id })
+        .sort({ createdAt: -1 })
+        .populate({
+          path: 'created_by',
+          select: 'username',
+          model: 'User'
+        }),
+    ]);
+
+    // Combine tasks and bills into one array
+    let combinedRecentActivity = recentActivity.flat();
+
+    // Sort combined recent activity by datelines field in descending order
+    combinedRecentActivity.sort((a, b) => b.createdAt - a.createdAt);
+
+    // Get all low, medium, and high priority tasks that deadlines are one day before
+    const dueTasks = await Task.find({
+      familyId: family._id,
+      status: "Incomplete",
+      datelines: { $lte: new Date(new Date().setDate(new Date().getDate() + 1)) }
+    })
+      .populate({
+        path: 'mentioned_user',
+        select: 'username',
+        model: 'User',
+      })
+      .exec();
+
+    // Get all low, medium, and high priority bills that deadlines are one day before
+    const dueBills = await Bill.find({
+      familyId: family._id,
+      status: "Unpaid",
+      datelines: { $lte: new Date(new Date().setDate(new Date().getDate() + 1)) }
+    })
+      .populate({
+        path: 'mentioned_user',
+        select: 'username',
+        model: 'User',
+      })
+      .exec();
+
+    // Combine the due tasks and bills and sort by priority
+    const combinedDueTasksAndBills = [...dueTasks, ...dueBills].sort((a, b) => a.priority.localeCompare(b.priority));
+
     const billsPerMonth = await Bill.aggregate([
       {
         $match: {
@@ -142,13 +172,13 @@ export const getDashboard = async (req, res) => {
         $sort: { "_id.month": 1 }
       }
     ]);
-
+    
     // Map month numbers to month names
     const monthNames = [
       "January", "February", "March", "April", "May", "June",
       "July", "August", "September", "October", "November", "December"
     ];
-
+    
     // Format billsPerMonth to ensure all 12 months are present
     const billsPerMonthFormatted = Array.from({ length: 12 }, (_, i) => {
       const monthData = billsPerMonth.find(item => item._id.month === i + 1);
@@ -159,70 +189,10 @@ export const getDashboard = async (req, res) => {
       };
     });
 
-    // Recent activity for task and bill in one group limit 5
-    const recentActivity = await Promise.all([
-      Task.find({ familyId: family._id })
-        .limit(5)
-        .sort({ createdAt: -1 })
-        .populate({
-          path: 'created_by',
-          select: 'username',
-          model: 'User'
-        }),
-
-      Bill.find({ familyId: family._id })
-        .limit(5)
-        .sort({ createdAt: -1 })
-        .populate({
-          path: 'created_by',
-          select: 'username',
-          model: 'User'
-        }),
-    ]);
-
-    // Combine tasks and bills into one array
-    let combinedRecentActivity = recentActivity.flat();
-
-    // Sort combined recent activity by createdAt field in descending order
-    combinedRecentActivity.sort((a, b) => b.createdAt - a.createdAt);
-
-
-    //get all low,medium and high priority tasks that datelines is one day before
-    const dueTasks = await Task.find({
-      familyId: family._id,
-      status: "Incomplete",
-      datelines: { $lte: new Date(new Date().setDate(new Date().getDate() + 1)) }
-      
-    })
-    //retrieve all mentioned users username
-    .populate({
-      path: 'mentioned_user',
-      select: 'username',
-      model: 'User',
-    })
-    .exec();
-
-    //get all low,medium and high priority bills that datelines is one day before
-    const dueBills = await Bill.find({
-      familyId: family._id,
-      status: "Unpaid",
-      datelines: { $lte: new Date(new Date().setDate(new Date().getDate() + 1)) }
-    })
-    //retrieve all mentioned users username
-    .populate({
-      path: 'mentioned_user',
-      select: 'username',
-      model: 'User',
-    })
-    .exec();
-
-    //combine the due tasks and bills and sort by priority
-    const combinedDueTasksAndBills = [...dueTasks, ...dueBills].sort((a, b) => a.priority.localeCompare(b.priority));
-
     // Response
     const response = {
       totalTaskCount,
-      totalBillCount: totalBillCount.length > 0 ? totalBillCount[0].totalAmount : 0,
+      totalBillCount,
       totalDueTaskCount,
       totalDueBillCount,
       totalPriority,

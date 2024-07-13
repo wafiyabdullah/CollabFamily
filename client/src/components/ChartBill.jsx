@@ -23,7 +23,7 @@ const ChartBill = ({ data, open, setOpen }) => {
                 as='h2'
                 className='text-base font-bold leading-6 text-gray-900 mb-4 items-center justify-center flex flex-row'
             >
-                {currentYear} Bill Per Month
+                {currentYear} Monthly Bill
             </Dialog.Title>
             <ResponsiveContainer
                 width="100%"

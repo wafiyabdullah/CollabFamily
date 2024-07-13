@@ -1,7 +1,8 @@
 //libraries
 import React, {useState, useEffect} from 'react'
-import { useForm } from 'react-hook-form'
+import { get, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+
 
 //components
 import ModalWrapper from '../ModalWrapper'
@@ -14,6 +15,7 @@ import Button from '../Button'
 import {dateFormatter} from '../../utils/index'
 import Loading from '../Loader'
 
+
 //Redux API
 import { useCreateBillMutation, useUpdateBillMutation } from '../../redux/slices/api/billApiSlice'
 
@@ -22,6 +24,7 @@ const PRIORITY = ["Low", "Medium", "High"]
 const CATEGORY = ["Utilities", "Loans", "Rent", "Insurance", "Transportation", "Subscriptions", "Others"]
 
 const animatedComponents = makeAnimated();
+
 
 const AddBill = ({open, setOpen, bill, familyMembers = []}) => {   
     const defaultValues = {
@@ -42,7 +45,8 @@ const AddBill = ({open, setOpen, bill, familyMembers = []}) => {
     const [category, setCategory] = useState(bill?.category || CATEGORY[0]);
     const [createBill, { isLoading }] = useCreateBillMutation();
     const [updateBill, { isLoading: isUpdating }] = useUpdateBillMutation();
-
+    
+    
     const {
         register, 
         handleSubmit, 
@@ -90,6 +94,7 @@ const AddBill = ({open, setOpen, bill, familyMembers = []}) => {
         }
     };
 
+    
     const familyMemberOptions = familyMembers.map(member => ({ value: member._id, label: member.username }));
 
     return (
@@ -180,6 +185,7 @@ const AddBill = ({open, setOpen, bill, familyMembers = []}) => {
                             selected={priority}
                             setSelected={setPriority}
                         />
+                        
                         </div>
                         
                         <div className='py-6 sm:flex sm:flex-row-reverse gap-4'>

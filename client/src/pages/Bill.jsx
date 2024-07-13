@@ -26,6 +26,7 @@ const animatedComponents = makeAnimated();
 
 const billSort = [
   { value: 'My bill', label: 'My Bill' },
+  { value: 'This Month', label: 'This Month' },
   { value: 'ClosestDatelines', label: 'Closest Deadlines' },
   { value: 'HighPriority', label: 'High Priority' },
   { value: 'Unpaid', label: 'Unpaid' },
@@ -78,10 +79,23 @@ const Bill = () => {
     }
 
     const criteriaValues = sortCriteria.map(criteria => criteria.value);
+
     // Filter based on multiple selected criteria
     if (criteriaValues.includes('My bill')) {
       // Filter bills where the logged-in user is mentioned
       sortedBills = sortedBills.filter(bill => bill.mentioned_user.some(u => u._id === user._id));
+    }
+
+    if (criteriaValues.includes('This Month')) {
+      // Filter tasks for the current month
+      const currentDate = new Date();
+      const currentMonth = currentDate.getMonth(); // Get the current month (0-11)
+      const currentYear = currentDate.getFullYear(); // Get the current year
+
+      sortedBills = sortedBills.filter(bill => {
+        const BillDate = new Date(bill.datelines);
+        return BillDate.getMonth() === currentMonth && BillDate.getFullYear() === currentYear;
+      });
     }
 
     if (criteriaValues.includes('ClosestDatelines')) {

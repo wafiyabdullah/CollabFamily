@@ -27,6 +27,7 @@ const animatedComponents = makeAnimated();
 
 const taskSort = [
   { value: 'My task', label: 'My Task' },
+  { value: 'ThisMonth', label: 'This Month' },
   { value: 'ClosestDatelines', label: 'Closest Deadlines' },
   { value: 'HighPriority', label: 'High Priority' },
   { value: 'Incomplete', label: 'Incomplete' },
@@ -75,6 +76,18 @@ const Task = () => {
     if (criteriaValues.includes('My task')) {
       // Filter tasks where the logged-in user is mentioned
       sortedTasks = sortedTasks.filter(task => task.mentioned_user.some(u => u._id === user._id));
+    }
+
+    if (criteriaValues.includes('ThisMonth')) {
+      // Filter tasks for the current month and current year
+      const currentDate = new Date();
+      const currentMonth = currentDate.getMonth(); // Get the current month (0-11)
+      const currentYear = currentDate.getFullYear(); // Get the current year
+
+      sortedTasks = sortedTasks.filter(task => {
+        const taskDate = new Date(task.datelines);
+        return taskDate.getMonth() === currentMonth && taskDate.getFullYear() === currentYear;
+      });
     }
 
     // Filter based on multiple selected criteria
