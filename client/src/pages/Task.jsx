@@ -15,6 +15,7 @@ import Loading from '../components/Loader';
 import Button from '../components/Button';
 import TaskCard from '../components/TaskCard';
 import Title from '../components/Title';
+import NoTaskBill from '../components/NoTaskBill';
 
 import { useGetTaskQuery } from "../redux/slices/api/taskApiSlice";
 
@@ -164,8 +165,9 @@ const Task = () => {
             <Loading />
           </div>
         ) : filteredTasks.length === 0 ? (
-          <div className='py-10 text-center text-gray-500'>
-            There are no tasks. Create a task to get started!
+          <div className='py-10 text-center text-gray-500 justify-center items-center'>
+            <NoTaskBill />
+            <div className='text-center mt-4'>There are no task.</div>
           </div>
         ) : (
           <div className='w-full py-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 2xl:gap-4'>

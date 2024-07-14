@@ -14,6 +14,7 @@ import Title from '../components/Title'
 import Button from '../components/Button'
 import AddBill from '../components/bill/AddBill'
 import BillCard from '../components/BillCard'
+import NoTaskBill from '../components/NoTaskBill';
 
 import { useGetBillQuery } from "../redux/slices/api/billApiSlice";
 
@@ -181,7 +182,8 @@ const Bill = () => {
           </div>
         ) : filteredBills.length === 0 ? (
           <div className='py-10 text-center text-gray-500'>
-            There are no bills. Create a bill to get started!
+            <NoTaskBill />
+            <div className='text-center mt-4'>There are no bill.</div>
           </div>
         ) : (
           <div className='w-full py-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 2xl:gap-4'>
