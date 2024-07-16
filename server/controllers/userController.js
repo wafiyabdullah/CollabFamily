@@ -4,6 +4,18 @@ import Task from "../models/task.js";
 import Bill from "../models/bill.js";
 import Notification from '../models/notification.js';
 import { createJWT, generateFamilyId } from "../utils/index.js";
+import dotenv from 'dotenv';
+import nodemailer from 'nodemailer';
+
+dotenv.config();
+
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+})
 
 export const registerUser = async (req, res) => {
     try {
@@ -41,6 +53,23 @@ export const registerUser = async (req, res) => {
             user.password = undefined; // remove password from response
 
             res.status(201).json(user); // send response
+
+            //sent register email to admin
+            const mailOptions = { 
+                from: process.env.EMAIL_USER,
+                to: process.env.EMAIL_USER,
+                subject: 'New User: ${username} Register',
+                text: `New user ${username} with email ${email} has registered role ${role}`
+            }
+
+            transporter.sendMail(mailOptions, function(error, info){
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Email sent: ' + info.response);
+                }
+            });
+            
         }else{
             return res
                 .status(400) 
