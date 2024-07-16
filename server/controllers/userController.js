@@ -57,8 +57,8 @@ export const registerUser = async (req, res) => {
             //sent register email to admin
             const mailOptions = { 
                 from: process.env.EMAIL_USER,
-                to: process.env.EMAIL_USER,
-                subject: 'New User: ${username} Register',
+                to: 'wafiy.elias@outlook.com',
+                subject: `New User: ${username} Register`,
                 text: `New user ${username} with email ${email} has registered role ${role}`
             }
 
